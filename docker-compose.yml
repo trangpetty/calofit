@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  # Cài đặt MySQL
+  mysql:
+    image: mysql:8.0
+    container_name: calofit_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root  # Mật khẩu root
+      MYSQL_DATABASE: calofit_db # Tự động tạo database tên này
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  # Cài đặt Redis (Dùng cho Rate Limiting ở các task sau)
+  redis:
+    image: redis:alpine
+    container_name: calofit_redis
+    ports:
+      - "6379:6379"
+
+volumes:
+  mysql_data: # Lưu trữ dữ liệu MySQL để không bị mất khi tắt Docker
