@@ -1,0 +1,12 @@
+# Root gitignore
+.idea/
+.vscode/
+.DS_Store
+
+# Bỏ qua thư mục node_modules trong frontend
+frontend/node_modules/
+frontend/.next/
+
+# Bỏ qua thư mục build/target trong backend
+backend/target/
+backend/*.iml
