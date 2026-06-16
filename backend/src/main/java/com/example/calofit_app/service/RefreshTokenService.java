@@ -1,4 +1,4 @@
-package service;
+package com.example.calofit_app.service;
 
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
