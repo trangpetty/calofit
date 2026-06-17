@@ -15,7 +15,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -44,18 +48,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         // 2. Cắt bỏ chữ "Bearer " để lấy cái Token lõi
         jwt = authHeader.substring(7);
         userEmail = jwtService.extractEmail(jwt);
-        String role = jwtService.extractRole(jwt);
+        String roleString = jwtService.extractRole(jwt);
 
         // 3. Nếu lấy được email và hiện tại Security Context chưa ghi nhận ai đăng nhập
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
             // 4. Kiểm tra xem Token còn hạn và hợp lệ không
             if (jwtService.isTokenValid(jwt, userEmail)) {
+                List<SimpleGrantedAuthority> authorities = Arrays.stream(roleString.split(","))
+                        .map(role -> new SimpleGrantedAuthority("ROLE_" + role.trim().toUpperCase()))
+                        .collect(Collectors.toList());
                 // Tạo một cái "thẻ tên" gắn Role cho user này
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userEmail,
                         null,
-                        Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role.toUpperCase()))
+                        authorities
                 );
 
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
