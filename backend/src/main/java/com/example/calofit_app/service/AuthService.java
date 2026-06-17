@@ -2,7 +2,9 @@ package com.example.calofit_app.service;
 
 import com.example.calofit_app.dto.AuthRequest;
 import com.example.calofit_app.dto.AuthResponse;
+import com.example.calofit_app.entity.enums.SubscriptionStatus;
 import com.example.calofit_app.entity.User;
+import com.example.calofit_app.repository.SubscriptionRepository;
 import com.example.calofit_app.repository.UserRepository;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
@@ -12,13 +14,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class AuthService {
 
     private final UserRepository userRepository;
+    private final SubscriptionRepository subscriptionRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final RefreshTokenService refreshTokenService;
@@ -26,8 +28,9 @@ public class AuthService {
     @Value(("${app.google.client-id}"))
     private String googleClientId;
 
-    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService, RefreshTokenService refreshTokenService) {
+    public AuthService(UserRepository userRepository, SubscriptionRepository subscriptionRepository, PasswordEncoder passwordEncoder, JwtService jwtService, RefreshTokenService refreshTokenService) {
         this.userRepository = userRepository;
+        this.subscriptionRepository = subscriptionRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
         this.refreshTokenService = refreshTokenService;
@@ -46,7 +49,7 @@ public class AuthService {
 
         userRepository.save(user);
 
-        return generateToken(user.getEmail(),  user.getRole());
+        return generateToken(user);
     }
 
     public AuthResponse login(AuthRequest authRequest) {
@@ -57,7 +60,7 @@ public class AuthService {
             throw new RuntimeException("Password not match");
         }
 
-        return generateToken(user.getEmail(), user.getRole());
+        return generateToken(user);
     }
 
     public AuthResponse googleLogin(String idTokenString) {
@@ -87,7 +90,7 @@ public class AuthService {
                 userRepository.save(user);
             }
 
-            return  generateToken(user.getEmail(), user.getRole());
+            return  generateToken(user);
         } catch (Exception e) {
             throw new RuntimeException("Authentication failed: " + e.getMessage());
         }
@@ -111,15 +114,32 @@ public class AuthService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Email not found"));
         // 6. Cấp phát cặp Token hoàn toàn mới và lưu lại vào Redis
-        return generateToken(user.getEmail(), user.getRole());
+        return generateToken(user);
     }
 
-    private AuthResponse generateToken(String email, String role) {
-        String accessToken = jwtService.generateAccessToken(email, role);
-        String refreshToken = jwtService.generateRefreshToken(email);
+    private AuthResponse generateToken(User user) {
 
-        refreshTokenService.saveRefreshToken(email, refreshToken);
+        List<String> authorities = new ArrayList<>();
+        authorities.add(user.getRole());
 
-        return new AuthResponse(accessToken, refreshToken, email, role);
+        if(user.getRole() != null && user.getRole().contains("USER")) {
+            boolean hasActivePremium = subscriptionRepository.hasActivePremium(user.getId(), SubscriptionStatus.ACTIVE);
+
+            if(hasActivePremium) {
+                authorities.add("PREMIUM");
+            }
+        } else {
+            System.out.println("3. Bỏ qua soi DB vì Role không phải là USER");
+        }
+
+        String roleString = String.join(",", authorities);
+
+
+        String accessToken = jwtService.generateAccessToken(user.getEmail(), roleString);
+        String refreshToken = jwtService.generateRefreshToken(user.getEmail());
+
+        refreshTokenService.saveRefreshToken(user.getEmail(), refreshToken);
+
+        return new AuthResponse(accessToken, refreshToken, user.getEmail(), roleString);
     }
 }
