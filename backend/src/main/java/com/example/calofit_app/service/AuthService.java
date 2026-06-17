@@ -4,8 +4,16 @@ import com.example.calofit_app.dto.AuthRequest;
 import com.example.calofit_app.dto.AuthResponse;
 import com.example.calofit_app.entity.User;
 import com.example.calofit_app.repository.UserRepository;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.gson.GsonFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
+import java.util.UUID;
 
 @Service
 public class AuthService {
@@ -14,6 +22,9 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final RefreshTokenService refreshTokenService;
+
+    @Value(("${app.google.client-id}"))
+    private String googleClientId;
 
     public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService, RefreshTokenService refreshTokenService) {
         this.userRepository = userRepository;
@@ -47,6 +58,39 @@ public class AuthService {
         }
 
         return generateToken(user.getEmail(), user.getRole());
+    }
+
+    public AuthResponse googleLogin(String idTokenString) {
+        try {
+            GoogleIdTokenVerifier verifier= new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new GsonFactory())
+                    .setAudience(Collections.singletonList(googleClientId))
+                    .build();
+
+            GoogleIdToken idToken = verifier.verify(idTokenString);
+            if (idToken == null) {
+                throw new RuntimeException("Id token verification failed");
+            }
+
+            GoogleIdToken.Payload payload = idToken.getPayload();
+            String email = payload.getEmail();
+            String name = (String) payload.get("name");
+
+            User user = userRepository.findByEmail(email).orElse(null);
+
+            if (user == null) {
+                user = new User();
+                user.setEmail(email);
+                user.setDisplayName(name);
+                user.setRole("USER");
+
+                user.setPasswordHash(passwordEncoder.encode(UUID.randomUUID().toString()));
+                userRepository.save(user);
+            }
+
+            return  generateToken(user.getEmail(), user.getRole());
+        } catch (Exception e) {
+            throw new RuntimeException("Authentication failed: " + e.getMessage());
+        }
     }
 
     public AuthResponse refreshToken(String refreshToken) {

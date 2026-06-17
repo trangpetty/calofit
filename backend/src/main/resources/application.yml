@@ -26,3 +26,7 @@ spring:
     redis:
       host: localhost
       port: 6379
+
+app:
+  google:
+    client-id: 978787902078-k4ghrb012l8pmkj9ts01274s62a7stuo.apps.googleusercontent.com
