@@ -6,7 +6,7 @@ import {cookies} from "next/headers";
 export async function submitProfileData(data: ProfileFormData) {
     await new Promise(resolve => setTimeout(resolve, 1500));
     try {
-        const cookieStore = cookies();
+        const cookieStore = await cookies();
         const token = cookieStore.get('accessToken')?.value;
         const response = await fetch("https://localhost:8080/api/v1/profiles", {
             method: 'POST',
