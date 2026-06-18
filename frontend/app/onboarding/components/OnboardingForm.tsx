@@ -4,7 +4,7 @@
 
 import { useActionState, useState, startTransition } from 'react';
 import { submitProfileData } from '../actions';
-import { ProfileFormData, OnboardingState, StepErrors, FormDataState } from '@/types/onboarding';
+import { ProfileFormData, OnboardingState, StepErrors, FormDataState } from '../../types/onboarding';
 import { STEPS } from '../steps.config';
 import { StepRenderer }  from './StepRenderer';
 import { StepNavigation } from './StepNavigation';
