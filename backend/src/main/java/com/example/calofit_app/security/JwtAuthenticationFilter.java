@@ -49,7 +49,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         jwt = authHeader.substring(7);
         userEmail = jwtService.extractEmail(jwt);
         String roleString = jwtService.extractRole(jwt);
-
+        System.out.println("Debug JWT Filter - Email: " + userEmail + " | Role: " + roleString);
         // 3. Nếu lấy được email và hiện tại Security Context chưa ghi nhận ai đăng nhập
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 

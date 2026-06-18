@@ -11,10 +11,43 @@ export interface ProfileFormData {
     goal: Goal | '';
 }
 
-export type StepType = 'GENDER' | 'BODY' | 'ACTIVITY' | 'GOAL';
+export interface ProfileResult {
+    dailyCaloriesGoal: number;
+    proteinTarget:     number;
+    carbsTarget:       number;
+    fatTarget:         number;
+}
+
+export type StepErrors    = Partial<Record<keyof ProfileFormData, string>>;
+export type FormDataState = Partial<ProfileFormData>;
+
+export type OnboardingState =
+    | { status: 'idle' }
+    | { status: 'error';   message: string }
+    | { status: 'success'; data: ProfileResult };
+
+// ── Config types ──────────────────────────────────────────────────────────────
+
+export type FieldType = 'number-input' | 'card-select' | 'icon-select';
+
+export interface OptionItem {
+    id:    string;
+    label: string;
+    desc?: string;   // dùng cho card-select
+    icon?: string;   // dùng cho icon-select
+}
+
+export interface StepField {
+    name:        keyof ProfileFormData;
+    label:       string;
+    type:        FieldType;
+    placeholder?: string;
+    step?:        number;              // cho input[type=number]
+    options?:    OptionItem[];         // cho card-select / icon-select
+    cols?:       1 | 2 | 3;           // số cột grid (mặc định 1)
+}
 
 export interface StepConfig {
-    id: StepType;
-    title: string;
-    component: React.ReactNode;
+    title:  string;
+    fields: StepField[];
 }
