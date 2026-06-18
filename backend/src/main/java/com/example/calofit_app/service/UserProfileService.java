@@ -91,4 +91,10 @@ public class UserProfileService {
 
         return userProfileRepository.save(profile);
     }
+
+    public UserProfile getProfileByEmail(String email) {
+        return userProfileRepository.findByUserEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
 }

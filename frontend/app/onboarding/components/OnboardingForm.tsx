@@ -2,8 +2,8 @@
 
 // app/onboarding/components/OnboardingForm.tsx
 
-import { useActionState, useState, startTransition } from 'react';
-import { submitProfileData } from '../actions';
+import { useActionState, useState, startTransition, useEffect } from 'react';
+import {getProfile, submitProfileData} from '../actions';
 import { ProfileFormData, OnboardingState, StepErrors, FormDataState } from '../../types/onboarding';
 import { STEPS } from '../steps.config';
 import { StepRenderer }  from './StepRenderer';
@@ -93,6 +93,14 @@ export default function OnboardingForm() {
     };
 
     const isSuccess = actionState.status === 'success';
+
+    useEffect(() => {
+        async function fetchProfile() {
+            const profile = await getProfile();
+            console.log("profile: ", profile)
+        }
+        fetchProfile();
+    }, []);
 
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">

@@ -7,6 +7,7 @@ import com.example.calofit_app.service.UserProfileService;
 import org.springframework.security.core.Authentication;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,5 +26,16 @@ public class UserProfileController {
         String email = authentication.getName();
         UserProfile savedProfile = userProfileService.createUserProfile(email, request);
         return ResponseEntity.ok(savedProfile);
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<?> getUserProfile(Authentication authentication) {
+        try {
+            String email = authentication.getName();
+            UserProfile profile = userProfileService.getProfileByEmail(email);
+            return ResponseEntity.ok(profile);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(404).body(e.getMessage());
+        }
     }
 }
