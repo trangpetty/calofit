@@ -1,15 +1,21 @@
 'use server';
 
 import { ProfileFormData } from "@/app/types/onboarding";
-import { cookies } from "next/headers";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 export async function submitProfileData(prevState: any, rawData: FormData | ProfileFormData) {
     try {
-        const cookieStore = await cookies();
-        const token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QGdtYWlsLmNvbSIsInJvbGUiOiJVU0VSLFBSRU1JVU0iLCJpYXQiOjE3ODE3NTM5ODIsImV4cCI6MTc4MTc1NDg4Mn0.kSfythucMo2Xl-agO5NRtfJkrf2Kr7WoV_--WCoCbn8';
-        // const token = cookieStore.get('accessToken')?.value;
+        const session = await getServerSession(authOptions);
 
-        // Chuyển đổi dữ liệu thông minh
+        // Lấy token từ session
+        const token = (session as any)?.accessToken || (session as any)?.user?.accessToken;
+
+        if (!token) {
+            console.error("Không tìm thấy token trong session. Chi tiết session hiện tại:", session);
+            return { status: 'error', message: 'Lỗi xác thực: Không tìm thấy Token. Vui lòng kiểm tra lại cấu hình NextAuth!' };
+        }
+
         let dataToSubmit: any;
         if (rawData instanceof FormData) {
             dataToSubmit = {
@@ -40,13 +46,11 @@ export async function submitProfileData(prevState: any, rawData: FormData | Prof
 
         const result = await response.json();
 
-        // QUAN TRỌNG: Trả về 'status' để khớp với biến isSuccess bên OnboardingForm
         return { status: 'success', data: result };
 
     } catch (error) {
         console.error("Lỗi khi lưu profile:", error);
 
-        // QUAN TRỌNG: Trả về 'status: error'
         return { status: 'error', message: 'Đã có lỗi xảy ra khi lưu hồ sơ. Vui lòng thử lại!' };
     }
 }
