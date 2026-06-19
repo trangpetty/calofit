@@ -12,46 +12,138 @@ interface Props {
 
 export function StepRenderer({ config, data, errors, onChange }: Props) {
     const widthStep = "500px";
-    const heightStep = "440px";
+    const parseText = (text?: string) => {
+        if(!text) return '';
+        return text.replace('{{name}}', data.name ? String(data.name) : '');
+    }
+
+    const dynamicTitle = parseText(config.title);
+    const dynamicSubTitle = parseText(config.subTitle);
 
     return (
-        <div className="space-y-6" style={{ width: widthStep, height: heightStep }}>
-            <h2 className="text-2xl font-bold text-gray-800 text-center">
-                {config.title}
+        <div className="space-y-6" style={{ width: widthStep }}>
+            <h2 className="text-2xl font-bold text-gray-800 text-center m-0">
+                {dynamicTitle}
             </h2>
+            <p className="text-gray-500 text-sm text-center mt-2">
+                {dynamicSubTitle}
+            </p>
 
             {config.fields.map((field) => {
                 const value = data[field.name];
                 const error = errors[field.name];
 
                 return (
-                    <div key={field.name}>
+                    <div key={field?.name}>
                         {/* Hidden input để FormData có giá trị khi submit */}
                         <input type="hidden" name={field.name} value={value?.toString() ?? ''} />
 
                         {field.label && (
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                            <label className="block text-lg text-gray-800 mb-2">
                                 {field.label}
+                            </label>
+                        )}
+                        {field?.subLabel && (
+                            <label className="block text-sm font-medium text-gray-500 mb-4">
+                                {field.subLabel}
                             </label>
                         )}
 
                         {/* ── number-input ── */}
                         {field.type === 'number-input' && (
-                            <input
-                                type="number"
-                                placeholder={field.placeholder}
-                                step={field.step}
-                                value={value?.toString() ?? ''}
-                                onChange={(e) =>
-                                    onChange(field.name, e.target.value ? Number(e.target.value) : '')
-                                }
-                                className={`w-full p-3 border text-gray-900 bg-transparent rounded-xl outline-none transition-all ${
-                                    error
-                                        ? 'border-red-500 ring-1 ring-red-500'
-                                        : 'border-gray-300 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500'
-                                }`}
-                            />
+                            <div>
+                                <div className="relative mt-2 mt-3 max-w-[320px]">
+                                    {field.innerLabel && (
+                                        <span className="absolute -top-2.5 left-3 bg-white px-1 text-xs text-gray-500 z-10">
+                                            {field.innerLabel}
+                                        </span>
+                                    )}
+
+                                    <input
+                                        type="number"
+                                        placeholder={field.placeholder}
+                                        step={field.step}
+                                        value={value?.toString() ?? ''}
+                                        onChange={(e) =>
+                                            onChange(field.name, e.target.value ? Number(e.target.value) : '')
+                                        }
+                                        className={`p-4 w-full border text-gray-900 bg-transparent rounded-lg outline-none transition-all ${
+                                            field.unit ? 'pr-12' : 'pr-4'
+                                        } ${
+                                            error
+                                                ? 'border-red-500 ring-1 ring-red-500'
+                                                : 'border-gray-300 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 hover:border-gray-400'
+                                        }`}
+                                    />
+
+                                    {field.unit && (
+                                        <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none">
+                                            {field.unit}
+                                        </span>
+                                    )}
+                                </div>
+                            </div>
                         )}
+
+                        {/* ── text-input ── */}
+                        {field.type === 'text-input' && (
+                            <div>
+                                <div className="relative mt-2">
+                                    {field.innerLabel && (
+                                        <span className="absolute -top-2.5 left-3 bg-white px-1 text-sm text-gray-500 z-10">
+                                            {field.innerLabel}
+                                        </span>
+                                    )}
+
+                                    <input
+                                        type="text"
+                                        placeholder={field.placeholder}
+                                        step={field.step}
+                                        value={value?.toString() ?? ''}
+                                        onChange={(e) =>
+                                            onChange(field.name, e.target.value ? e.target.value : '')
+                                        }
+                                        className={`p-4 border w-full text-gray-900 bg-transparent rounded-lg outline-none transition-all pr-4 ${
+                                            error
+                                                ? 'border-red-500 ring-1 ring-red-500'
+                                                : 'border-gray-300 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 hover:border-gray-400'
+                                        }`}
+                                    />
+                                </div>
+                            </div>
+                        )}
+
+                        {/* ── radio-select ── */}
+                        {field.type === 'radio-select' && (
+                            <div className={`flex gap-5`}>
+                                {field.options?.map((opt) => (
+                                    <div className="flex items-center" key={opt.id}>
+                                        <input
+                                            type="radio"
+                                            id={opt.id}
+                                            name={field.name}
+                                            value={opt.id}
+                                            checked={value === opt.id}
+                                            onChange={(e) =>
+                                                onChange(field.name, opt.id)
+                                            }
+                                            className={`w-5 h-5 cursor-pointer accent-emerald-600 ${
+                                                error
+                                                    ? 'border-red-500'
+                                                    : 'border-gray-300'
+                                            }`}
+                                        />
+                                        <label
+                                            htmlFor={opt.id}
+                                            className="block text-[15px] cursor-pointer text-gray-800 ml-3"
+                                        >
+                                            {opt.label}
+                                        </label>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+
 
                         {/* ── card-select (text only, hỗ trợ desc) ── */}
                         {field.type === 'card-select' && (
@@ -91,7 +183,7 @@ export function StepRenderer({ config, data, errors, onChange }: Props) {
                                         }`}
                                     >
                                         {opt.icon && <span className="text-3xl">{opt.icon}</span>}
-                                        <span className="font-medium text-gray-800 text-lg">{opt.label}</span>
+                                        <span className="font-medium text-gray-800 text-lg text-start">{opt.label}</span>
                                     </button>
                                 ))}
                             </div>
@@ -103,6 +195,9 @@ export function StepRenderer({ config, data, errors, onChange }: Props) {
                     </div>
                 );
             })}
+            <p className="text-gray-500 text-sm text-center mt-2">
+                {config?.bottomTitle}
+            </p>
         </div>
     );
 }

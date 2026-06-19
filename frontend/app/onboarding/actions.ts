@@ -1,12 +1,11 @@
 'use server';
 
 import { ProfileFormData } from "@/app/types/onboarding";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { auth } from "@/auth";
 
 export async function submitProfileData(prevState: any, rawData: FormData | ProfileFormData) {
     try {
-        const session = await getServerSession(authOptions);
+        const session = await auth();
 
         // Lấy token từ session
         const token = (session as any)?.accessToken || (session as any)?.user?.accessToken;
@@ -73,18 +72,12 @@ export async function getProfile (prevState: any) {
             },
         });
 
-        if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(`Failed to save profile: ${errorText}`);
-        }
+        if (!response.ok) throw new Error("Lỗi fetch API");
 
         const result = await response.json();
-
         return { status: 'success', data: result };
 
     } catch (error) {
-        console.error("Lỗi khi lưu profile:", error);
-
-        return { status: 'error', message: 'Đã có lỗi xảy ra khi lưu hồ sơ. Vui lòng thử lại!' };
+        return { status: 'error', message: 'Đã có lỗi xảy ra!' };
     }
 }

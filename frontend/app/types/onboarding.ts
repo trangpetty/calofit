@@ -41,13 +41,16 @@ export interface StepField {
     name:        keyof ProfileFormData;
     label:       string;
     type:        FieldType;
+    innerLabel?: string;
     placeholder?: string;
     step?:        number;              // cho input[type=number]
+    unit?:        string;
     options?:    OptionItem[];         // cho card-select / icon-select
     cols?:       1 | 2 | 3;           // số cột grid (mặc định 1)
 }
 
 export interface StepConfig {
     title:  string;
+    subTitle?: string;
     fields: StepField[];
 }
