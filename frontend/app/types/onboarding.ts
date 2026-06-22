@@ -3,6 +3,7 @@ export type ActivityLevel = 'SEDENTARY' | 'LIGHTLY_ACTIVE' | 'MODERATELY_ACTIVE'
 export type Goal = 'LOSE_WEIGHT' | 'MAINTAIN_WEIGHT' | 'GAIN_MUSCLE';
 
 export interface ProfileFormData {
+    name: string | '';
     gender: Gender | '';
     age: number | '';
     height: number | '';
@@ -53,4 +54,10 @@ export interface StepConfig {
     title:  string;
     subTitle?: string;
     fields: StepField[];
+}
+
+export interface OnboardingState {
+    status: 'idle' | 'success' | 'error';
+    message?: string;
+    data?: any;
 }

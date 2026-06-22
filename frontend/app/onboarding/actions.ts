@@ -1,10 +1,10 @@
 'use server';
 
-import { ProfileFormData } from "@/app/types/onboarding";
+import {OnboardingState, ProfileFormData} from "@/app/types/onboarding";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
-export async function submitProfileData(prevState: any, rawData: FormData | ProfileFormData) {
+export async function submitProfileData(prevState: any, rawData: FormData | ProfileFormData):Promise<OnboardingState> {
     try {
         const session = await getServerSession(authOptions);
 
@@ -55,7 +55,7 @@ export async function submitProfileData(prevState: any, rawData: FormData | Prof
     }
 }
 
-export async function getProfile (prevState: any) {
+export async function getProfile () {
     try {
         const session = await getServerSession(authOptions);
         const token = (session as any)?.accessToken || (session as any)?.user?.accessToken;

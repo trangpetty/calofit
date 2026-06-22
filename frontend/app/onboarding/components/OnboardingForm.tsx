@@ -14,19 +14,18 @@ function validateStep(stepIndex: number, data: FormDataState): StepErrors {
     const fields = STEPS[stepIndex].fields;
 
     for (const field of fields) {
-        const val = data[field.name];
+        const val = data[field.name as keyof typeof data];
 
         if (field.type === 'number-input') {
             const num = Number(val);
             if (!val && val !== 0) {
-                errors[field.name] = `Please enter ${field.label.toLowerCase()}`;
-            } else if (field.name === 'age'    && (num < 12  || num > 100)) errors.age    = 'Tuổi phải từ 12 đến 100';
+                errors[field.name as keyof ProfileFormData] = `Please enter ${field.label.toLowerCase()}`;            } else if (field.name === 'age'    && (num < 12  || num > 100)) errors.age    = 'Tuổi phải từ 12 đến 100';
             else if (field.name === 'height'   && (num < 100 || num > 250)) errors.height = 'Chiều cao không hợp lệ';
             else if (field.name === 'weight'   && (num < 30  || num > 300)) errors.weight = 'Cân nặng không hợp lệ';
         }
 
         if ((field.type === 'card-select' || field.type === 'icon-select') && !val) {
-            errors[field.name] = `Vui lòng chọn ${field.label || 'một lựa chọn'}`;
+            errors[field.name as keyof ProfileFormData] = `Vui lòng chọn ${field.label || 'một lựa chọn'}`;
         }
     }
 
@@ -50,9 +49,12 @@ export default function OnboardingForm({isLoggedIn = false}: {isLoggedIn?: boole
 
     const totalSteps = STEPS.length;
 
-    const handleChange = (field: keyof ProfileFormData, value: string | number) => {
+    const handleChange = (field: string, value: string | number) => {
         setFormData((prev) => ({ ...prev, [field]: value }));
-        if (errors[field]) setErrors((prev) => ({ ...prev, [field]: undefined }));
+        const errorKey = field as keyof StepErrors;
+        if (errors[errorKey]) {
+            setErrors((prev) => ({ ...prev, [errorKey]: undefined }));
+        }
     };
 
     const goNext = () => {
@@ -136,8 +138,7 @@ export default function OnboardingForm({isLoggedIn = false}: {isLoggedIn?: boole
         <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
             <div className="w-full bg-white rounded-3xl shadow-xl overflow-hidden">
                 {(isSuccess || profile) ? (
-                    <SuccessScreen data={actionState.data || profile} />
-                ) : (
+                    <SuccessScreen data={actionState.status === 'success' ? actionState.data : profile} />                ) : (
                     <div>
                         <div className="h-1.5 w-full bg-gray-100">
                             <div
@@ -163,7 +164,7 @@ export default function OnboardingForm({isLoggedIn = false}: {isLoggedIn?: boole
                                             config={STEPS[currentStep]}
                                             data={formData}
                                             errors={errors}
-                                            onChange={handleChange}
+                                            onChange={handleChange as any}
                                         />
                                     </div>
 

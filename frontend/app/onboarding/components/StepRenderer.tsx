@@ -1,7 +1,7 @@
 // app/onboarding/components/StepRenderer.tsx
 'use client';
 
-import { StepConfig, StepErrors, FormDataState, ProfileFormData } from '@/types/onboarding';
+import { StepConfig, StepErrors, FormDataState, ProfileFormData } from '@/app/types/onboarding';
 
 interface Props {
     config:   StepConfig;
