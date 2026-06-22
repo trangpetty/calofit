@@ -1,67 +1,21 @@
-// app/onboarding/steps.config.ts
-// Toàn bộ cấu trúc form nằm ở đây — thêm/xoá/sửa step chỉ cần chỉnh file này.
-
 import { StepConfig } from '@/types/onboarding';
 
 export const STEPS: StepConfig[] = [
     {
-        title: 'Cho chúng tôi biết về bạn',
+        title: 'What’s your first name?',
+        subTitle: 'We’re happy you’re here. Let’s get to know a little about you.',
         fields: [
             {
-                name:    'gender',
-                label:   'Giới tính sinh học',
-                type:    'card-select',
-                cols:    2,
-                options: [
-                    { id: 'MALE',   label: 'Nam' },
-                    { id: 'FEMALE', label: 'Nữ' },
-                ],
-            },
-            {
-                name:        'age',
-                label:       'Tuổi của bạn',
-                type:        'number-input',
-                placeholder: 'Ví dụ: 25',
-            },
+                name:    'name',
+                innerLabel:   'First Name',
+                type:    'text-input',
+                placeholder: 'First Name'
+            }
         ],
     },
     {
-        title: 'Chỉ số cơ thể',
-        fields: [
-            {
-                name:        'height',
-                label:       'Chiều cao (cm)',
-                type:        'number-input',
-                placeholder: 'Ví dụ: 170',
-            },
-            {
-                name:        'weight',
-                label:       'Cân nặng (kg)',
-                type:        'number-input',
-                placeholder: 'Ví dụ: 65',
-                step:        0.1,
-            },
-        ],
-    },
-    {
-        title: 'Mức độ vận động của bạn?',
-        fields: [
-            {
-                name:    'activityLevel',
-                label:   '',
-                type:    'card-select',
-                cols:    1,
-                options: [
-                    { id: 'SEDENTARY',         label: 'Ít vận động',    desc: 'Làm việc văn phòng, không tập thể dục' },
-                    { id: 'LIGHTLY_ACTIVE',    label: 'Vận động nhẹ',   desc: 'Tập luyện nhẹ 1-3 ngày/tuần' },
-                    { id: 'MODERATELY_ACTIVE', label: 'Vận động vừa',   desc: 'Tập luyện 3-5 ngày/tuần' },
-                    { id: 'VERY_ACTIVE',       label: 'Vận động nhiều', desc: 'Tập luyện nặng 6-7 ngày/tuần' },
-                ],
-            },
-        ],
-    },
-    {
-        title: 'Mục tiêu của bạn là gì?',
+        title: 'Thanks {{name}}! Now for your goals.',
+        subTitle: 'Select all that apply.',
         fields: [
             {
                 name:    'goal',
@@ -69,9 +23,98 @@ export const STEPS: StepConfig[] = [
                 type:    'icon-select',
                 cols:    1,
                 options: [
-                    { id: 'LOSE_WEIGHT',     label: 'Giảm Cân',          icon: '🔥' },
-                    { id: 'MAINTAIN_WEIGHT', label: 'Giữ Dáng',           icon: '⚖️' },
-                    { id: 'GAIN_MUSCLE',     label: 'Tăng Cơ / Tăng Cân', icon: '💪' },
+                    { id: 'LOSE_WEIGHT',     label: 'Tone up – you want visible muscles with as little mass as possible',          icon: '🔥' },
+                    { id: 'MAINTAIN_WEIGHT', label: 'Bulk up – you want large, well-defined muscles, with a low percentage of body fat',           icon: '⚖️' },
+                    { id: 'GAIN_MUSCLE',     label: 'Get strong – you want to lift the maximum amount of weight and are not concerned with body fat or muscle definition', icon: '💪' },
+                ],
+            },
+        ],
+    },
+    {
+        title: 'What is your baseline activity level?',
+        subTitle: 'Not including workouts–we count that separately',
+        fields: [
+            {
+                name:    'activityLevel',
+                label:   '',
+                type:    'card-select',
+                cols:    1,
+                options: [
+                    { id: 'SEDENTARY',         label: 'Not Very Active',    desc: 'Spend most of the day sitting (e.g., bankteller, desk job)' },
+                    { id: 'LIGHTLY_ACTIVE',    label: 'Lightly Active',   desc: 'Spend a good part of the day on your feet (e.g., teacher, salesperson)' },
+                    { id: 'MODERATELY_ACTIVE', label: 'Active',   desc: 'Spend a good part of the day doing some physical activity (e.g., food server, postal carrier)' },
+                    { id: 'VERY_ACTIVE',       label: 'Very Active', desc: 'Spend a good part of the day doing heavy physical activity (e.g., bike messenger, carpenter)' },
+                ],
+            },
+        ],
+    },
+    {
+        title: 'Your detail information',
+        fields: [
+            {
+                name:    'gender',
+                label:   'Please select which sex we should use to calculate your calorie needs.',
+                type:    'radio-select',
+                options: [
+                    { id: 'MALE',   label: 'Male' },
+                    { id: 'FEMALE', label: 'Females' },
+                ],
+            },
+            {
+                name:        'age',
+                label:       'How old are you?',
+                innerLabel:  'Your age',
+                type:        'number-input',
+                placeholder: 'Example: 25',
+            },
+        ],
+        bottomTitle: 'We use this information to calculate an accurate calorie goal for you.'
+    },
+    {
+        title: 'Chỉ số cơ thể',
+        fields: [
+            {
+                name:        'height',
+                label:       'How tall are you?',
+                type:        'number-input',
+                innerLabel:  'Height',
+                unit:        'cm',
+                placeholder: 'Example: 170',
+            },
+            {
+                name:        'weight',
+                label:       'How much do you weigh?',
+                subLabel:    'It\'s OK to estimate. You can update this later.',
+                type:        'number-input',
+                innerLabel:  'Current weight',
+                unit:        'kg',
+                placeholder: 'Example: 65',
+                step:        0.1,
+            },
+            {
+                name:        'weightGoal',
+                label:       'What\'s your goal weight?',
+                subLabel:    'Don\'t worry. This doesn\'t affect your daily calorie goal and you can always change it later.',
+                type:        'number-input',
+                innerLabel:  'Goal weight',
+                unit:        'kg',
+                placeholder: 'Example: 65',
+                step:        0.1,
+            },
+        ],
+    },
+    {
+        title: 'What is your weekly goal?',
+        subTitle: 'Let\'s break down your overall health goal into a weekly one you can maintain. Slow-and-steady is best!',
+        fields: [
+            {
+                name:    'weightWeek',
+                label:   '',
+                type:    'card-select',
+                cols:    1,
+                options: [
+                    { id: '0.25',         label: 'Gain 0.25 kilograms per week (Recommended)'},
+                    { id: '0.5',    label: 'Gain 0.5 kilograms per week'},
                 ],
             },
         ],

@@ -36,25 +36,23 @@ export function StepNavigation({
                     type="button"
                     onClick={onPrev}
                     disabled={isSubmitting}
-                    className="flex-1 py-4 border border-gray-200 rounded-xl font-medium text-gray-600 hover:bg-gray-50 flex items-center justify-center gap-1 transition-colors disabled:opacity-50"
+                    className="flex-1 py-4 border-3 border-emerald-600 rounded-xl font-bold text-emerald-600 uppercase text-lg tracking-wider hover:bg-gray-50 flex items-center justify-center gap-1 transition-colors disabled:opacity-50"
                 >
-                    <ChevronLeft /> Quay lại
+                    <ChevronLeft /> BACK
                 </button>
             )}
 
             <button
-                type={isLastStep ? 'submit' : 'button'}
-                onClick={isLastStep ? undefined : onNext}
+                type="button"
+                onClick={onNext}
                 disabled={isSubmitting}
-                className="flex-[2] py-4 bg-gray-900 text-white rounded-xl font-medium hover:bg-black flex items-center justify-center gap-2 transition-colors shadow-md disabled:opacity-70 disabled:cursor-not-allowed"
+                className="flex-[1] py-4 bg-emerald-600 text-white font-bold rounded-xl text-lg tracking-wider hover:bg-emerald-400 flex items-center justify-center gap-2 transition-colors shadow-md disabled:opacity-70 disabled:cursor-not-allowed"
             >
                 {isSubmitting ? (
                     <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                ) : isLastStep ? (
-                    'Hoàn tất'
                 ) : (
                     <>
-                        Tiếp tục <ChevronRight />
+                        NEXT <ChevronRight />
                     </>
                 )}
             </button>

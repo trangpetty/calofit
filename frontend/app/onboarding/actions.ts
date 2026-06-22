@@ -1,10 +1,10 @@
 'use server';
 
-import { ProfileFormData } from "@/app/types/onboarding";
-import { getServerSession } from "next-auth";
+import {OnboardingState, ProfileFormData} from "@/app/types/onboarding";
+import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
-export async function submitProfileData(prevState: any, rawData: FormData | ProfileFormData) {
+export async function submitProfileData(prevState: any, rawData: FormData | ProfileFormData):Promise<OnboardingState> {
     try {
         const session = await getServerSession(authOptions);
 
@@ -52,5 +52,33 @@ export async function submitProfileData(prevState: any, rawData: FormData | Prof
         console.error("Lỗi khi lưu profile:", error);
 
         return { status: 'error', message: 'Đã có lỗi xảy ra khi lưu hồ sơ. Vui lòng thử lại!' };
+    }
+}
+
+export async function getProfile () {
+    try {
+        const session = await getServerSession(authOptions);
+        const token = (session as any)?.accessToken || (session as any)?.user?.accessToken;
+
+        if (!token) {
+            console.error("Không tìm thấy token trong session. Chi tiết session hiện tại:", session);
+            return { status: 'error', message: 'Lỗi xác thực: Không tìm thấy Token. Vui lòng kiểm tra lại cấu hình NextAuth!' };
+        }
+
+        const response = await fetch("http://localhost:8080/api/v1/profiles/me", {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+        });
+
+        if (!response.ok) throw new Error("Lỗi fetch API");
+
+        const result = await response.json();
+        return { status: 'success', data: result };
+
+    } catch (error) {
+        return { status: 'error', message: 'Đã có lỗi xảy ra!' };
     }
 }

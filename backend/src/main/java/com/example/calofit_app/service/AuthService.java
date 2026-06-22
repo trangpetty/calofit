@@ -44,23 +44,35 @@ public class AuthService {
         User user = new User();
         user.setEmail(authRequest.getEmail());
         user.setPasswordHash(passwordEncoder.encode(authRequest.getPassword()));
-        user.setDisplayName(authRequest.getDisplayName());
-        user.setRole(authRequest.getRole() != null ? authRequest.getRole() : "USER");
 
         userRepository.save(user);
 
         return generateToken(user);
     }
 
-    public AuthResponse login(AuthRequest authRequest) {
-        User user = userRepository.findByEmail(authRequest.getEmail())
-                .orElseThrow(() -> new RuntimeException("Email not found"));
+    public AuthResponse loginOrRegister(AuthRequest authRequest) {
+        Optional<User> optionalUser = userRepository.findByEmail(authRequest.getEmail());
+        User user;
 
-        if (!passwordEncoder.matches(authRequest.getPassword(), user.getPasswordHash())) {
-            throw new RuntimeException("Password not match");
+        if (optionalUser.isPresent()) {
+            user = optionalUser.get();
+            if (!passwordEncoder.matches(authRequest.getPassword(), user.getPasswordHash())) {
+                throw new RuntimeException("Password not match");
+            }
+        } else {
+            user = new User();
+            user.setEmail(authRequest.getEmail());
+            user.setPasswordHash(passwordEncoder.encode(authRequest.getPassword()));
+            user.setDisplayName(authRequest.getDisplayName());
+            user.setRole("USER");
+            user = userRepository.save(user);
         }
 
-        return generateToken(user);
+        String role = user.getRole();
+        String accessToken = jwtService.generateAccessToken(user.getEmail(), role);
+        String refreshToken = jwtService.generateRefreshToken(user.getEmail());
+
+        return new AuthResponse(user.getId(), accessToken, refreshToken, user.getEmail(), role);
     }
 
     public AuthResponse googleLogin(String idTokenString) {

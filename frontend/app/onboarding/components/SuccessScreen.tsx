@@ -18,7 +18,7 @@ export function SuccessScreen({ data }: Props) {
     const router = useRouter();
 
     return (
-        <div className="flex flex-col items-center text-center animate-fade-in-up">
+        <div className="flex flex-col items-center text-center animate-fade-in-up p-8">
             <div className="mb-4">
                 <CheckCircle />
             </div>
@@ -31,7 +31,7 @@ export function SuccessScreen({ data }: Props) {
                 <div className="flex justify-between items-center border-b border-emerald-100 pb-3">
                     <span className="text-emerald-800 font-medium">Mục tiêu Calo hằng ngày</span>
                     <span className="text-2xl font-bold text-emerald-600">
-            {data.dailyCaloriesGoal}{' '}
+            {data?.dailyCaloriesGoal}{' '}
                         <span className="text-sm font-normal">kcal</span>
           </span>
                 </div>
@@ -42,9 +42,9 @@ export function SuccessScreen({ data }: Props) {
           </span>
                     <div className="grid grid-cols-3 gap-2">
                         {[
-                            { label: 'Đạm',      value: data.proteinTarget, color: 'text-blue-600' },
-                            { label: 'Tinh bột', value: data.carbsTarget,   color: 'text-amber-600' },
-                            { label: 'Chất béo', value: data.fatTarget,     color: 'text-rose-500' },
+                            { label: 'Đạm',      value: data?.proteinTarget, color: 'text-blue-600' },
+                            { label: 'Tinh bột', value: data?.carbsTarget,   color: 'text-amber-600' },
+                            { label: 'Chất béo', value: data?.fatTarget,     color: 'text-rose-500' },
                         ].map(({ label, value, color }) => (
                             <div key={label} className="bg-white p-3 rounded-lg text-center border border-gray-100 shadow-sm">
                                 <div className="text-xs text-gray-500 uppercase tracking-wider mb-1">{label}</div>
@@ -56,7 +56,6 @@ export function SuccessScreen({ data }: Props) {
             </div>
 
             <button
-                onClick={() => router.push('/dashboard')}
                 className="w-full bg-emerald-600 text-white font-medium py-4 rounded-xl mt-6 hover:bg-emerald-700 transition-colors shadow-lg shadow-emerald-200"
             >
                 Bắt đầu theo dõi hành trình
