@@ -1,11 +1,12 @@
 'use server';
 
 import { ProfileFormData } from "@/app/types/onboarding";
-import { auth } from "@/auth";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 export async function submitProfileData(prevState: any, rawData: FormData | ProfileFormData) {
     try {
-        const session = await auth();
+        const session = await getServerSession(authOptions);
 
         // Lấy token từ session
         const token = (session as any)?.accessToken || (session as any)?.user?.accessToken;

@@ -1,6 +1,3 @@
-// app/onboarding/steps.config.ts
-// Toàn bộ cấu trúc form nằm ở đây — thêm/xoá/sửa step chỉ cần chỉnh file này.
-
 import { StepConfig } from '@/types/onboarding';
 
 export const STEPS: StepConfig[] = [

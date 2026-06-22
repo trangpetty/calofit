@@ -1,10 +1,11 @@
 import OnboardingForm from "@/app/onboarding/components/OnboardingForm";
 import {getProfile} from "@/app/onboarding/actions";
 import {redirect} from "next/navigation";
-import { auth } from "@/auth";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 export default async function Page () {
-    const session = await auth();
+    const session = await getServerSession(authOptions);
     const isLoggedIn = !!session;
 
     if (isLoggedIn) {

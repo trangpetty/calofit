@@ -1,7 +1,5 @@
 'use client';
 
-// app/onboarding/components/OnboardingForm.tsx
-
 import { useActionState, useState, startTransition, useEffect } from 'react';
 import {getProfile, submitProfileData} from '../actions';
 import { ProfileFormData, OnboardingState, StepErrors, FormDataState } from '../../types/onboarding';
@@ -10,8 +8,6 @@ import { StepRenderer }  from './StepRenderer';
 import { StepNavigation } from './StepNavigation';
 import { SuccessScreen }  from './SuccessScreen';
 import {AuthStep} from "@/app/onboarding/components/AuthStep";
-
-// ── Validation tự động từ config ──────────────────────────────────────────────
 
 function validateStep(stepIndex: number, data: FormDataState): StepErrors {
     const errors: StepErrors = {};
@@ -103,19 +99,38 @@ export default function OnboardingForm({isLoggedIn = false}: {isLoggedIn?: boole
 
     };
 
-    const isSuccess = actionState.status === 'success';
+    const handleAuthSuccess = () => {
+        const pendingData = localStorage.getItem('pendingOnboardingData');
+        if (pendingData) {
+            const parsedData = JSON.parse(pendingData);
+            startTransition(() => {
+                formAction(parsedData as any);
+            });
+            localStorage.removeItem('pendingOnboardingData');
+        }
+        setShowAuthStep(false);
+    };
+
     const [profile, setProfile] = useState(null);
 
     useEffect(() => {
-        async function fetchProfile() {
-            const res = await getProfile();
+        const pendingData = localStorage.getItem('pendingOnboardingData');
 
-            if (res.status === 'success') {
-                setProfile(res.data);
+        if (isLoggedIn) {
+            if (pendingData) {
+                handleAuthSuccess();
+            } else {
+                async function fetchProfile() {
+                    const res = await getProfile();
+                    if (res.status === 'success') {
+                        setProfile(res.data);
+                    }
+                }
+                fetchProfile();
             }
         }
-        fetchProfile();
     }, []);
+    const isSuccess = actionState.status === 'success';
 
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
@@ -133,7 +148,10 @@ export default function OnboardingForm({isLoggedIn = false}: {isLoggedIn?: boole
 
                         <div className="p-8">
                             {showAuthStep ? (
-                                <AuthStep onBack={() => setShowAuthStep(false)}/>
+                                <AuthStep
+                                    onBack={() => setShowAuthStep(false)}
+                                    onSuccess={handleAuthSuccess}
+                                />
                             ) : (
 
                                 <form onSubmit={((e) => {

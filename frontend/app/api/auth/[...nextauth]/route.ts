@@ -3,6 +3,7 @@ import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 export const authOptions: NextAuthOptions = {
+    secret: process.env.NEXTAUTH_SECRET,
     providers: [
         GoogleProvider({
             clientId: process.env.GOOGLE_CLIENT_ID as string,
@@ -13,7 +14,8 @@ export const authOptions: NextAuthOptions = {
             name: "Credentials",
             credentials: {
                 email: { label: "Email", type: "text" },
-                password: { label: "Password", type: "password" }
+                password: { label: "Password", type: "password" },
+                displayName: { label: "Display Name", type: "text" }
             },
             async authorize(credentials) {
                 try {
@@ -54,6 +56,8 @@ export const authOptions: NextAuthOptions = {
             if (token && session.user) {
                 (session.user as any).id = token.id;
                 (session as any).accessToken = token.accessToken;
+                (session as any).refreshToken = token.refreshToken;
+                (session.user as any).role = token.role;
             }
             return session;
         }

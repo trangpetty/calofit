@@ -8,9 +8,10 @@ import {useRouter} from "next/navigation";
 
 interface AuthStepProps {
     onBack: () => void;
+    onSuccess?: () => void;
 }
 
-export function AuthStep({onBack}: AuthStepProps) {
+export function AuthStep({onBack, onSuccess}: AuthStepProps) {
     const router = useRouter();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -22,9 +23,14 @@ export function AuthStep({onBack}: AuthStepProps) {
         setIsLoading(true);
         setError('');
 
+        const pendingData = localStorage.getItem('pendingOnboardingData');
+        const parsedData = pendingData ? JSON.parse(pendingData) : {};
+        const displayName = parsedData.name || '';
+
         const res = await signIn('credentials', {
             email,
             password,
+            displayName: displayName,
             redirect: false
         });
 
@@ -32,7 +38,9 @@ export function AuthStep({onBack}: AuthStepProps) {
             setError("Sai email/mật khẩu hoặc lỗi kết nối. Vui lòng thử lại!");
             setIsLoading(false);
         } else {
-            router.refresh();
+            if (onSuccess) {
+                onSuccess();
+            }
         }
     }
 
