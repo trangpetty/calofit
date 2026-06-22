@@ -17,6 +17,8 @@ export interface ProfileResult {
     proteinTarget:     number;
     carbsTarget:       number;
     fatTarget:         number;
+    tdee:              number;
+    weight:            number;
 }
 
 export type StepErrors    = Partial<Record<keyof ProfileFormData, string>>;
@@ -41,6 +43,7 @@ export interface OptionItem {
 export interface StepField {
     name:        keyof ProfileFormData;
     label:       string;
+    subLabel?:   string;
     type:        FieldType;
     innerLabel?: string;
     placeholder?: string;

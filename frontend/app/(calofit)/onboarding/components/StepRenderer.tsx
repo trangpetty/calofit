@@ -45,7 +45,7 @@ export function StepRenderer({ config, data, errors, onChange }: Props) {
                         )}
                         {field?.subLabel && (
                             <label className="block text-sm font-medium text-gray-500 mb-4">
-                                {field.subLabel}
+                                {field?.subLabel}
                             </label>
                         )}
 

@@ -1,4 +1,4 @@
-import { StepConfig } from '@/types/onboarding';
+import { StepConfig } from '@/app/types/onboarding';
 
 export const STEPS: StepConfig[] = [
     {

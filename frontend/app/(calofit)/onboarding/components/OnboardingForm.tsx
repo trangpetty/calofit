@@ -2,12 +2,12 @@
 
 import { useActionState, useState, startTransition, useEffect } from 'react';
 import {getProfile, submitProfileData} from '../actions';
-import { ProfileFormData, OnboardingState, StepErrors, FormDataState } from '../../types/onboarding';
+import {ProfileFormData, OnboardingState, StepErrors, FormDataState, ProfileResult} from '@/app/types/onboarding';
 import { STEPS } from '../steps.config';
 import { StepRenderer }  from './StepRenderer';
 import { StepNavigation } from './StepNavigation';
 import { SuccessScreen }  from './SuccessScreen';
-import {AuthStep} from "@/app/onboarding/components/AuthStep";
+import {AuthStep} from "@/app/(calofit)/onboarding/components/AuthStep";
 
 function validateStep(stepIndex: number, data: FormDataState): StepErrors {
     const errors: StepErrors = {};
@@ -113,7 +113,7 @@ export default function OnboardingForm({isLoggedIn = false}: {isLoggedIn?: boole
         setShowAuthStep(false);
     };
 
-    const [profile, setProfile] = useState(null);
+    const [profile, setProfile] = useState<ProfileResult | null>(null);
 
     useEffect(() => {
         const pendingData = localStorage.getItem('pendingOnboardingData');
@@ -125,7 +125,7 @@ export default function OnboardingForm({isLoggedIn = false}: {isLoggedIn?: boole
                 async function fetchProfile() {
                     const res = await getProfile();
                     if (res.status === 'success') {
-                        setProfile(res.data);
+                        setProfile(res.data as ProfileResult);
                     }
                 }
                 fetchProfile();

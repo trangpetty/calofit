@@ -45,10 +45,29 @@ export const authOptions: NextAuthOptions = {
         })
     ],
     callbacks: {
-        async jwt({ token, user }) {
-            if (user) {
+        async jwt({ token, user, account }) {
+            if (user && account?.provider === "credentials") {
                 token.id = user.id;
                 token.accessToken = (user as any).accessToken;
+            }
+
+
+            if (user && account?.provider === "google") {
+                try {
+                    const res = await fetch("http://localhost:8080/api/v1/auth/google", {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ idToken: account.id_token })
+                    });
+
+                    if (res.ok) {
+                        const data = await res.json();
+                        token.id = data.id;
+                        token.accessToken = data.accessToken;
+                    }
+                } catch (error) {
+                    console.error("Lỗi lấy token Spring Boot cho Google:", error);
+                }
             }
             return token;
         },
