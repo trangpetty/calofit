@@ -4,11 +4,29 @@ import { usePathname } from "next/navigation";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useState } from "react";
+import { Fire, Bell, CaretDown } from "@phosphor-icons/react";
+import { Button } from "@/components/ui/button";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+    Avatar,
+    AvatarFallback,
+    AvatarImage,
+} from "@/components/ui/avatar"
+import Image from "next/image";
 
 const NAV_LINKS = [
     { name: 'Dashboard', href: '/dashboard' },
-    { name: 'Food', href: '/food' },
-    { name: 'Exercises', href: '/exercises' },
+    { name: 'Food', href: '/food-log' },
+    { name: 'Workouts', href: '/workout' },
+    { name: 'Progress', href: '/exercises' },
+    { name: 'Reports', href: '/exercises' },
+    { name: 'AI coach', href: '/exercises' },
 ];
 
 export default function Header() {
@@ -17,15 +35,15 @@ export default function Header() {
     const [isMobileOpen, setIsMobileOpen] = useState(false);
 
     return (
-        <header className="bg-emerald-600 text-white backdrop-blur-md shadow-lg border-b sticky top-0 z-50 relative">
-            <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <header className="bg-emerald-600 text-white backdrop-blur-md shadow-lg border-b sticky top-0 z-50">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
                 <div className="flex justify-between items-center h-16">
 
                     <div className="flex items-center gap-3">
                         <button
                             onClick={() => setIsMobileOpen(!isMobileOpen)}
-                            className="md:hidden p-2 -ml-2  hover:bg-gray-100 rounded-lg focus:outline-none"
+                            className="md:hidden p-2 -ml-2  hover:bg-gray-100 hover:text-emerald-600 rounded-lg focus:outline-none"
                         >
                             {isMobileOpen ? (
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
@@ -39,7 +57,7 @@ export default function Header() {
                         </button>
 
                         <Link href="/" className="flex items-center">
-                            <img src="/images/logo-white.svg" alt="Calofit Logo" className="w-44" />
+                            <Image src="/images/logo-white.svg" width={180} height={100} className="w-44 h-auto" alt="Calofit Logo" />
                         </Link>
                     </div>
 
@@ -63,23 +81,59 @@ export default function Header() {
                         })}
                     </nav>
 
-                    <div className="hidden md:flex items-center gap-4">
+                    <div className="hidden md:flex space-x-2 h-full w-[25%]">
                         {status === 'loading' ? (
                             <div className="w-20 h-8 rounded-lg bg-gray-100 animate-pulse"></div>
                         ) : session ? (
-                            <div className="flex items-center gap-4 text-sm font-medium">
-                                <div className="hidden sm:block">
-                                    <span>Hi, </span>
-                                    <span className="font-extrabold tracking-wide ml-1">
-                                        {session.user?.name || session.user?.email}
-                                    </span>
+                            <div className="flex items-center gap-2">
+                                <div className="flex items-center gap-1.5 bg-orange-50 text-[#e65c00] px-3 py-1.5 rounded-full font-semibold text-sm cursor-default">
+                                    <Fire size={18} weight="bold" />
+                                    <span>12 ngày</span>
                                 </div>
-                                <button
-                                    onClick={() => signOut()}
-                                    className="hover:text-gray-200 cursor-pointer transition-colors"
+
+                                <Button
+                                    variant="outline"
+                                    size="icon"
+                                    className="relative rounded-xl bg-white border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-gray-900 shadow-sm"
                                 >
-                                    Log Out
-                                </button>
+                                    <Bell size={30} weight="regular" />
+                                    <span className="absolute top-2 right-2.5 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
+                                </Button>
+
+                                {/* 3. Dropdown User */}
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild className="border border-white">
+                                        <button className="flex items-center gap-2.5 p-1 pr-2 hover:bg-gray-50 text-white hover:text-emerald-600 rounded-full transition-colors outline-none focus-visible:ring-2 focus-visible:ring-emerald-500">
+                                            <Avatar>
+                                                <AvatarImage
+                                                    src={session.user?.image}
+                                                    alt={session.user?.name}
+                                                />
+                                                <AvatarFallback>{session.user?.name}</AvatarFallback>
+                                            </Avatar>
+
+                                            <span className="text-sm font-bold">{session.user?.name}</span>
+
+                                            <CaretDown size={14} weight="bold" />
+
+                                        </button>
+                                    </DropdownMenuTrigger>
+                                    {/* Menu's content */}
+                                        <DropdownMenuContent align="end" className="w-48 rounded-xl bg-white text-gray-900 px-3 py-2">
+                                            <DropdownMenuItem className="cursor-pointer font-medium">
+                                                Hồ sơ cá nhân
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem className="cursor-pointer font-medium">
+                                                Cài đặt
+                                            </DropdownMenuItem>
+
+                                            <DropdownMenuSeparator />
+
+                                            <DropdownMenuItem className="cursor-pointer font-medium text-red-500 focus:text-red-500 focus:bg-red-50">
+                                                Đăng xuất
+                                            </DropdownMenuItem>
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
                             </div>
                         ) : (
                             <button

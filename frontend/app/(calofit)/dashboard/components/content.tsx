@@ -1,215 +1,142 @@
 'use client'
 
-import {Barbell, BowlFood, CalendarCheck, Drop, Fire, Target, ForkKnife} from "@phosphor-icons/react/ssr";
+import {Drop, Fire, MinusIcon, PersonSimpleRunIcon  } from "@phosphor-icons/react/ssr";
 import {useSession} from "next-auth/react";
+import {SparkleIcon} from "@phosphor-icons/react";
+import MetricCard from "@/app/(calofit)/dashboard/components/(cards)/metric_card";
+import MacrosCard from "@/app/(calofit)/dashboard/components/(cards)/MacrosCard";
+import CaloriesWeekCard from "@/app/(calofit)/dashboard/components/(cards)/CaloriesWeekCard";
+import { Button } from "@/components/ui/button";
 
 export default function ContentDashBoard ({profile}: {profile: any}) {
     const {data: session, status} = useSession();
-    const baseGoal = 1800;
-    const food = 0;
-    const exercise = 0;
-    const remaining = baseGoal - food + exercise;
 
+    const metricsData = [
+        {
+            id: 1,
+            title: "Calo vào",
+            icon: <Fire size={18} weight="fill" />,
+            mainValue: "1.240",
+            subValue: "/ 1.800 kcal",
+            progressPercentage: 68,
+            footerText: "Còn 560 kcal",
+            themeColor: "green" as const,
+        },
+        {
+            id: 2,
+            title: "Burned",
+            icon: <PersonSimpleRunIcon size={18} weight="fill" />,
+            mainValue: "430",
+            subValue: "kcal workout",
+            progressPercentage: 40,
+            footerText: "+12% vs last week",
+            themeColor: "blue" as const,
+            footerColor: "text-blue-500"
+        },
+        {
+            id: 3,
+            title: "Deficit",
+            icon: <MinusIcon size={18} weight="bold" />,
+            mainValue: "-990",
+            subValue: "kcal",
+            progressPercentage: 80,
+            footerText: "Pretty much",
+            themeColor: "orange" as const,
+        },
+        {
+            id: 4,
+            title: "Water",
+            icon: <Drop size={18} weight="fill" />,
+            mainValue: (
+                <span>1.2<span className="text-xl">L</span></span>
+            ),
+            subValue: "/ 2.5L",
+            progressPercentage: 48,
+            footerText: "1.3L Remaining",
+            themeColor: "cyan" as const,
+        }
+    ];
     return (
-        <main className="max-w-7xl mx-auto px-6 mt-8 space-y-6">
+        <main className="max-w-5xl mx-auto px-6 mt-8 space-y-6">
             {session ?
                 (
                     <main>
-                        <header className="flex items-center justify-between">
-                            {session.user?.image && (
-                                <div className="flex items-center gap-4">
-                                    <img src={session.user.image} alt="Avatar" className="w-16 h-16 rounded-full"/>
-                                    <p className="text-gray-900 text-2xl font-bold">Today</p>
-                                </div>
-                            )}
-                            <div className="flex flex-col text-gray-600">
-                                <div className="flex items-center gap-3 text-2xl font-extrabold ">
-                                    <div className="p-2 bg-gray-200 rounded-xl">
-                                        <Fire size={20} weight="duotone"/>
-                                    </div>
-                                    <p className="text-2xl  font-extrabold">0</p>
-                                </div>
-                                <p>Day streak</p>
+                        {/* introduce of AI */}
+                        <div className="bg-violet-200 lg:p-3 p-3 lg:my-4 my-2 rounded-lg flex items-center justify-between">
+                            <div className="flex items-center">
+                                <SparkleIcon size={24} weight="bold" className="text-violet-600"/>
+                                <p className="text-gray-900 lg:text-base text-sm mx-3">
+                                    AI coach: còn thiếu 52g protein — bữa tối nên ưu tiên ức gà hoặc cá hồi
+                                    <button className="bg-purple-300 text-purple-600 font-semibold rounded-lg py-0.5 px-2 ml-2 cursor-pointer">
+                                        Premium
+                                    </button>
+                                </p>
                             </div>
-                        </header>
-                        <div className="flex flex-wrap gap-4">
-                            <section className="shadow-lg p-5 rounded-lg flex flex-col gap-4" style={{width: "600px"}}>
+                            <div className="bg-gray-50 rounded-2xl text-emerald-600 py-1 px-3 text-sm md:text-xs">
+                                Try it free for 7 days.
+                            </div>
+                        </div>
+
+                        {/* List calorie + workout + deficit + water */}
+                        <div className="w-full grid lg:grid-cols-4 grid-cols-2 gap-4 my-4">
+                            {metricsData.map((metric) => (
+                                <MetricCard
+                                    key={metric.id}
+                                    title={metric.title}
+                                    icon={metric.icon}
+                                    mainValue={metric.mainValue}
+                                    subValue={metric.subValue}
+                                    progressPercentage={metric.progressPercentage}
+                                    footerText={metric.footerText}
+                                    themeColor={metric.themeColor}
+                                    footerColor={metric.footerColor}
+                                />
+                            ))}
+                        </div>
+
+                        {/* Macros */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                            <MacrosCard />
+                            <CaloriesWeekCard />
+                        </div>
+
+                        {/*  With PT  */}
+                        <div className="w-full border-2 border-emerald-600 rounded-2xl p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-sm mt-4">
+
+                            <div className="flex items-center gap-4">
+                                <div className="w-12 h-12 shrink-0 rounded-full bg-[#e0f2fe] text-blue-600 flex items-center justify-center font-bold text-lg">
+                                    HV
+                                </div>
+
                                 <div>
-                                    <p className="text-xl text-gray-900 font-bold">Calories</p>
-                                    <p className="text-sm text-gray-400">Remaining = Goal - Food + Exercise</p>
+                                    <h3 className="text-gray-900 font-bold text-base leading-tight">
+                                        Your coach
+                                    </h3>
+                                    <p className="text-gray-400 text-sm mt-1">
+                                        No personal trainer yet — find a personal trainer that suits your goals.
+                                    </p>
                                 </div>
-                                <div className="flex items-center justify-between">
-                                    <div className="relative flex justify-center items-center w-36 h-36">
-                                        <svg className="absolute top-0 left-0 w-full h-full transform -rotate-90"
-                                             viewBox="0 0 100 100">
-                                            <circle
-                                                className="text-gray-100 stroke-current"
-                                                strokeWidth="8"
-                                                cx="50"
-                                                cy="50"
-                                                r="42"
-                                                fill="transparent"
-                                            />
-                                            <circle
-                                                className="text-emerald-500 stroke-current transition-all duration-1000 ease-in-out"
-                                                strokeWidth="8"
-                                                strokeLinecap="round"
-                                                cx="50"
-                                                cy="50"
-                                                r="42"
-                                                fill="transparent"
-                                                strokeDasharray="264"
-                                                strokeDashoffset="264"
-                                            />
-                                        </svg>
+                            </div>
 
-                                        <div className="flex flex-col items-center justify-center z-10 text-center">
-                                            <span className="text-3xl font-bold text-gray-900 tracking-tight">
-                                                {remaining}
-                                            </span>
-                                            <span className="text-sm font-medium text-gray-500">
-                                                Remaining
-                                            </span>
-                                        </div>
-                                    </div>
+                            <div className="flex items-center gap-3">
+                                <Button
+                                    className="flex-1 md:flex-none rounded-full border-emerald-600 text-gray-900 bg-transparent hover:bg-emerald-700 hover:text-white"
+                                >
+                                    Find out
+                                </Button>
 
-                                    <div className="flex flex-col justify-center gap-5">
+                                <Button
+                                    className="flex-1 md:flex-none rounded-full bg-emerald-600 hover:bg-emerald-700 text-white border-0"
+                                >
+                                    Find PT
+                                </Button>
+                            </div>
 
-                                        <div className="flex items-center gap-3">
-                                            <Target className="w-5 h-5 text-gray-500" strokeWidth={2.5}/>
-                                            <div className="flex flex-col">
-                                                <span className="text-xs font-medium text-gray-500">Base Goal</span>
-                                                <span className="text-base font-bold text-gray-900 leading-tight">
-                                                    {baseGoal}
-                                                </span>
-                                            </div>
-                                        </div>
-
-                                        <div className="flex items-center gap-3">
-                                            <ForkKnife className="w-5 h-5 text-blue-500" strokeWidth={2.5}/>
-                                            <div className="flex flex-col">
-                                                <span className="text-xs font-medium text-gray-500">Food</span>
-                                                <span className="text-base font-bold text-gray-900 leading-tight">
-                                                    {food}
-                                                </span>
-                                            </div>
-                                        </div>
-
-                                        <div className="flex items-center gap-3">
-                                            <Fire className="w-5 h-5 text-orange-500" strokeWidth={2.5}/>
-                                            <div className="flex flex-col">
-                                                <span className="text-xs font-medium text-gray-500">Exercise</span>
-                                                <span className="text-base font-bold text-gray-900 leading-tight">
-                                                    {exercise}
-                                                </span>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </section>
                         </div>
                     </main>
                 ) : (
                     <></>
                 )}
-            <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div
-                    className="col-span-1 md:col-span-1 bg-gradient-to-br from-emerald-600 to-emerald-800 rounded-3xl p-6 text-white shadow-lg shadow-emerald-200">
-                    <div className="flex items-center gap-2 text-emerald-100 mb-4">
-                        <Fire size={24} weight="duotone"/>
-                        <h2 className="font-medium">Mục tiêu Calo</h2>
-                    </div>
-                    <div className="flex items-baseline gap-1">
-                            <span className="text-5xl font-extrabold tracking-tight">
-                                {profile?.dailyCaloriesGoal}
-                            </span>
-                        <span className="text-emerald-200 font-medium">kcal</span>
-                    </div>
-                    <p className="text-sm text-emerald-100 mt-4 opacity-80">
-                        TDEE của bạn: {profile?.tdee} kcal
-                    </p>
-                </div>
-
-                {/* Macros */}
-                <div
-                    className="col-span-1 md:col-span-2 bg-white rounded-3xl p-6 border border-gray-100 shadow-sm flex flex-col justify-center">
-                    <h2 className="text-gray-800 font-bold mb-4">Phân bổ dinh dưỡng (Macros)</h2>
-                    <div className="grid grid-cols-3 gap-4">
-                        <div className="bg-blue-50 p-4 rounded-2xl border border-blue-100">
-                            <div className="flex items-center gap-2 text-blue-600 mb-1">
-                                <Barbell size={20} weight="fill"/>
-                                <span className="text-sm font-bold">ĐẠM</span>
-                            </div>
-                            <p className="text-2xl font-extrabold text-gray-900">{profile?.proteinTarget || '--'}<span
-                                className="text-sm text-gray-500 font-normal ml-1">g</span></p>
-                        </div>
-                        <div className="bg-amber-50 p-4 rounded-2xl border border-amber-100">
-                            <div className="flex items-center gap-2 text-amber-600 mb-1">
-                                <BowlFood size={20} weight="fill"/>
-                                <span className="text-sm font-bold">TINH BỘT</span>
-                            </div>
-                            <p className="text-2xl font-extrabold text-gray-900">{profile?.carbsTarget || '--'}<span
-                                className="text-sm text-gray-500 font-normal ml-1">g</span></p>
-                        </div>
-                        <div className="bg-rose-50 p-4 rounded-2xl border border-rose-100">
-                            <div className="flex items-center gap-2 text-rose-500 mb-1">
-                                <Drop size={20} weight="fill"/>
-                                <span className="text-sm font-bold">CHẤT BÉO</span>
-                            </div>
-                            <p className="text-2xl font-extrabold text-gray-900">{profile?.fatTarget || '--'}<span
-                                className="text-sm text-gray-500 font-normal ml-1">g</span></p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* --- KHỐI 2: DÀNH CHO SCRUM 13 & 14 (Goal Tracker) --- */}
-            <section className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-                {/* Widget: Tiến độ giảm cân */}
-                <div className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm">
-                    <div className="flex items-center justify-between mb-6">
-                        <div className="flex items-center gap-3">
-                            <div className="p-2 bg-purple-100 text-purple-600 rounded-xl">
-                                <Target size={24} weight="duotone"/>
-                            </div>
-                            <h2 className="font-bold text-gray-800 text-lg">Tiến độ mục tiêu</h2>
-                        </div>
-                        <span className="text-sm font-bold text-emerald-500 bg-emerald-50 px-3 py-1 rounded-full">
-                                Đang xây dựng...
-                            </span>
-                    </div>
-
-                    <div className="space-y-4">
-                        <div className="flex justify-between text-sm">
-                            <span className="text-gray-500">Hiện tại: <strong
-                                className="text-gray-900">{profile?.weight} kg</strong></span>
-                            <span className="text-gray-500">Mục tiêu: <strong
-                                className="text-gray-900">-- kg</strong></span>
-                        </div>
-                        <div className="w-full bg-gray-100 rounded-full h-3">
-                            <div className="bg-purple-500 h-3 rounded-full" style={{width: '35%'}}></div>
-                        </div>
-                        <p className="text-center text-sm text-gray-500 mt-2">Đã hoàn thành 35%</p>
-                    </div>
-                </div>
-
-                <div
-                    className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm flex flex-col justify-between">
-                    <div className="flex items-center gap-3 mb-4">
-                        <div className="p-2 bg-orange-100 text-orange-600 rounded-xl">
-                            <CalendarCheck size={24} weight="duotone"/>
-                        </div>
-                        <h2 className="font-bold text-gray-800 text-lg">Dự kiến hoàn thành</h2>
-                    </div>
-
-                    <div className="text-center py-6 border-2 border-dashed border-gray-200 rounded-2xl">
-                        <p className="text-3xl font-extrabold text-gray-300">Tháng 12, 2026</p>
-                        <p className="text-sm text-gray-400 mt-2">Dựa trên tốc độ 0.5kg/tuần</p>
-                    </div>
-                </div>
-            </section>
-
         </main>
     );
 }
