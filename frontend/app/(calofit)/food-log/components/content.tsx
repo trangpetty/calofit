@@ -1,13 +1,14 @@
 'use client';
 
 import React from 'react';
-import { Scan, Plus, Egg, Bread, Drop, FishSimple, BowlFood, ArrowDown } from "@phosphor-icons/react";
+import {Scan, Plus, Egg, Bread, Drop, FishSimple, BowlFood, OnigiriIcon} from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 // Import các component dùng chung (Nhớ trỏ đúng đường dẫn thư mục của bạn)
 import MetricCard from "@/app/(calofit)/dashboard/components/(cards)/metric_card";
 import BaseCard from "@/app/(calofit)/dashboard/components/(cards)/base_card";
+import {ButtonGetPremium} from "@/app/ui/button_premium";
 
 export default function ContentFoodLog({ profile }: { profile: any }) {
     return (
@@ -44,7 +45,7 @@ export default function ContentFoodLog({ profile }: { profile: any }) {
                             <span className="text-gray-400 text-sm">420 kcal</span>
                         </div>
                         <div className="flex flex-col gap-4">
-                            <FoodItem icon={<Egg size={20} weight="fill" />} iconBg="bg-[#fef3c7]" iconColor="text-yellow-600" name="Trứng luộc" desc="2 quả · 100g" calo={156} />
+                            <FoodItem icon={<Egg size={20} weight="fill" />} iconBg="bg-[#fef3c7]" iconColor="text-yellow-600" name="Trứng luộc" desc="2 quả · 100g" calo={156}/>
                             <FoodItem icon={<Bread size={20} weight="fill" />} iconBg="bg-orange-100" iconColor="text-orange-600" name="Bánh mì đen" desc="2 lát · 60g" calo={148} />
                             <FoodItem icon={<Drop size={20} weight="fill" />} iconBg="bg-blue-100" iconColor="text-blue-500" name="Sữa tươi" desc="200ml" calo={116} />
                         </div>
@@ -55,27 +56,20 @@ export default function ContentFoodLog({ profile }: { profile: any }) {
                             <span className="text-gray-400 text-sm">820 kcal</span>
                         </div>
                         <div className="flex flex-col gap-4">
-                            <FoodItem icon={<div className="w-5 h-5 rounded-sm bg-emerald-200"></div>} iconBg="bg-emerald-100" iconColor="" name="Cơm gạo lứt" desc="180g" calo={234} />
+                            <FoodItem icon={<div className="w-5 h-5 rounded-sm bg-emerald-200"><OnigiriIcon size={20} weight="bold" /></div>} iconBg="bg-emerald-100" iconColor="" name="Cơm gạo lứt" desc="180g" calo={234} />
                             <FoodItem icon={<div className="w-5 h-5 rounded-full bg-pink-300"></div>} iconBg="bg-pink-100" iconColor="" name="Ức gà luộc" desc="150g" calo={247} />
                         </div>
                     </BaseCard>
 
-                    <button className="w-full text-left p-4 border border-dashed border-gray-700 bg-[#242424]/50 rounded-2xl text-gray-400 hover:border-gray-500 hover:text-gray-300 transition-colors flex items-center justify-between">
+                    <button className="w-full text-left p-4 border-2 border-dashed border-emerald-600  rounded-2xl text-emerald-600 hover:border-gray-500 hover:bg-emerald-100 transition-colors flex items-center justify-between">
                         <span className="flex items-center gap-2"><Plus size={18} /> Thêm bữa tối...</span>
                     </button>
-
-                    {/* Nút mũi tên xuống */}
-                    <div className="flex justify-center -mt-8 relative z-10">
-                        <div className="bg-[#242424] border border-gray-700 w-10 h-10 rounded-full flex items-center justify-center text-gray-400 hover:text-white cursor-pointer shadow-lg">
-                            <ArrowDown size={20} />
-                        </div>
-                    </div>
                 </div>
 
-                {/* CỘT PHẢI: GỢI Ý & AI PLAN */}
+                {/* Suggestion and AI Plan */}
                 <div className="flex flex-col gap-4">
 
-                    {/* Thẻ Gợi ý */}
+                    {/* Suggestion Cards */}
                     <BaseCard title="Gợi ý thêm vào">
                         <div className="flex flex-col gap-4 mt-2">
                             <SuggestionItem icon={<FishSimple size={20} weight="fill" />} iconBg="bg-emerald-100" iconColor="text-emerald-600" name="Cá hồi áp chảo" desc="100g · 208 kcal · P: 20g" />
@@ -84,21 +78,17 @@ export default function ContentFoodLog({ profile }: { profile: any }) {
                         </div>
                     </BaseCard>
 
-                    {/* Thẻ AI Meal Plan (Tận dụng logic Blur) */}
-                    <BaseCard title="AI meal plan tuần này" badge="Premium">
+                    {/* AI Meal Plan */}
+                    <BaseCard title="AI meal plan this week" badge="Premium">
                         <div className="relative mt-2 h-[120px] rounded-xl overflow-hidden flex flex-col justify-center">
-                            {/* Nội dung bị mờ */}
                             <div className="blur-[4px] opacity-40 select-none flex flex-col gap-2">
                                 <div className="h-4 bg-gray-600 rounded w-3/4"></div>
                                 <div className="h-4 bg-gray-600 rounded w-2/3"></div>
                                 <div className="h-4 bg-gray-600 rounded w-1/2"></div>
                             </div>
 
-                            {/* Nút Premium Overlay */}
                             <div className="absolute inset-0 z-10 flex items-center justify-center">
-                                <Button variant="outline" className="bg-[#242424]/80 border-gray-600 text-white hover:bg-gray-800 rounded-xl px-5 py-5 flex items-center gap-2 backdrop-blur-sm">
-                                    <span className="text-xl">👑</span> Get Premium
-                                </Button>
+                                <ButtonGetPremium />
                             </div>
                         </div>
                     </BaseCard>
@@ -119,13 +109,13 @@ function FoodItem({ icon, iconBg, iconColor, name, desc, calo }: { icon: any, ic
                     {icon}
                 </div>
                 <div className="flex flex-col">
-                    <span className="font-bold text-white text-base">{name}</span>
-                    <span className="text-gray-400 text-xs">{desc}</span>
+                    <span className="font-bold text-gray-900 text-base">{name}</span>
+                    <span className="text-gray-500 text-xs">{desc}</span>
                 </div>
             </div>
-            <div className="flex flex-col items-end">
-                <span className="font-bold text-white">{calo}</span>
-                <span className="text-gray-500 text-[10px]">kcal</span>
+            <div className="flex items-center gap-1">
+                <span className="font-bold text-gray-900">{calo}</span>
+                <span className="text-gray-500 text-xs">kcal</span>
             </div>
         </div>
     );
@@ -133,13 +123,13 @@ function FoodItem({ icon, iconBg, iconColor, name, desc, calo }: { icon: any, ic
 
 function SuggestionItem({ icon, iconBg, iconColor, name, desc }: { icon: any, iconBg: string, iconColor: string, name: string, desc: string }) {
     return (
-        <div className="flex items-center justify-between group cursor-pointer hover:bg-gray-800/50 p-2 -mx-2 rounded-xl transition-colors">
+        <div className="flex items-center justify-between group cursor-pointer hover:bg-emerald-100 p-2 -mx-2 rounded-xl transition-colors">
             <div className="flex items-center gap-3">
                 <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${iconBg} ${iconColor}`}>
                     {icon}
                 </div>
                 <div className="flex flex-col">
-                    <span className="font-bold text-white text-sm">{name}</span>
+                    <span className="font-bold text-gray-900 text-sm">{name}</span>
                     <span className="text-gray-400 text-xs">{desc}</span>
                 </div>
             </div>
