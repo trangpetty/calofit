@@ -10,12 +10,14 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+@Slf4j
 @Service
 public class AuthService {
 
@@ -66,12 +68,13 @@ public class AuthService {
             user.setDisplayName(authRequest.getDisplayName());
             user.setRole("USER");
             user = userRepository.save(user);
+            log.info("User {} has been registered", user.getEmail());
         }
 
         String role = user.getRole();
         String accessToken = jwtService.generateAccessToken(user.getEmail(), role);
         String refreshToken = jwtService.generateRefreshToken(user.getEmail());
-
+        log.info("Login successful for user {}", user.getEmail());
         return new AuthResponse(user.getId(), accessToken, refreshToken, user.getEmail(), role);
     }
 
@@ -100,8 +103,9 @@ public class AuthService {
 
                 user.setPasswordHash(passwordEncoder.encode(UUID.randomUUID().toString()));
                 userRepository.save(user);
+                log.info("User {} has been registered", user.getEmail());
             }
-
+            log.info("Login successful for user {}", user.getEmail());
             return  generateToken(user);
         } catch (Exception e) {
             throw new RuntimeException("Authentication failed: " + e.getMessage());

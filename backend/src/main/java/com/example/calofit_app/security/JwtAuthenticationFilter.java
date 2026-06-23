@@ -55,7 +55,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             // 4. Kiểm tra xem Token còn hạn và hợp lệ không
             if (jwtService.isTokenValid(jwt, userEmail)) {
-                List<SimpleGrantedAuthority> authorities = Arrays.stream(roleString.split(","))
+                String safeRole = (roleString != null && !roleString.isEmpty()) ? roleString : "USER";
+                List<SimpleGrantedAuthority> authorities = Arrays.stream(safeRole.split(","))
                         .map(role -> new SimpleGrantedAuthority("ROLE_" + role.trim().toUpperCase()))
                         .collect(Collectors.toList());
                 // Tạo một cái "thẻ tên" gắn Role cho user này

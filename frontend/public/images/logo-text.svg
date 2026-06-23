@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="80" viewBox="0 0 320 80">
+  <text
+    x="0" y="58"
+    font-family="system-ui, -apple-system, 'Segoe UI', sans-serif"
+    font-size="64"
+    font-weight="500"
+    letter-spacing="-2"
+    fill="#14532d">Calo</text>
+  <text
+    x="122" y="58"
+    font-family="system-ui, -apple-system, 'Segoe UI', sans-serif"
+    font-size="64"
+    font-weight="500"
+    letter-spacing="-2"
+    fill="#16a34a">fit</text>
+</svg>
+ 

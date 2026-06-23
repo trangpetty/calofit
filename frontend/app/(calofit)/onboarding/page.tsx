@@ -1,14 +1,12 @@
-import OnboardingForm from "@/app/onboarding/components/OnboardingForm";
-import {getProfile} from "@/app/onboarding/actions";
+import OnboardingForm from "@/app/(calofit)/onboarding/components/OnboardingForm";
+import {getProfile} from "@/app/(calofit)/onboarding/actions";
 import {redirect} from "next/navigation";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import {requireAuth} from "@/app/utils/auth";
 
 export default async function Page () {
-    const session = await getServerSession(authOptions);
-    const isLoggedIn = !!session;
+    const {session, token} = await requireAuth();
 
-    if (isLoggedIn) {
+    if (session && token) {
         const res = await getProfile();
         if(res.status === "success") {
             redirect("/onboarding");

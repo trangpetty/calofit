@@ -2,12 +2,12 @@
 
 import { useActionState, useState, startTransition, useEffect } from 'react';
 import {getProfile, submitProfileData} from '../actions';
-import { ProfileFormData, OnboardingState, StepErrors, FormDataState } from '../../types/onboarding';
+import {ProfileFormData, OnboardingState, StepErrors, FormDataState, ProfileResult} from '@/app/types/onboarding';
 import { STEPS } from '../steps.config';
 import { StepRenderer }  from './StepRenderer';
 import { StepNavigation } from './StepNavigation';
 import { SuccessScreen }  from './SuccessScreen';
-import {AuthStep} from "@/app/onboarding/components/AuthStep";
+import {AuthStep} from "@/app/(calofit)/onboarding/components/AuthStep";
 
 function validateStep(stepIndex: number, data: FormDataState): StepErrors {
     const errors: StepErrors = {};
@@ -19,7 +19,7 @@ function validateStep(stepIndex: number, data: FormDataState): StepErrors {
         if (field.type === 'number-input') {
             const num = Number(val);
             if (!val && val !== 0) {
-                errors[field.name as keyof ProfileFormData] = `Please enter ${field.label.toLowerCase()}`;            } else if (field.name === 'age'    && (num < 12  || num > 100)) errors.age    = 'Tuổi phải từ 12 đến 100';
+                errors[field.name as keyof ProfileFormData] = `Please enter ${field.label?.toLowerCase() ?? 'this field'}`;            } else if (field.name === 'age'    && (num < 12  || num > 100)) errors.age    = 'Tuổi phải từ 12 đến 100';
             else if (field.name === 'height'   && (num < 100 || num > 250)) errors.height = 'Chiều cao không hợp lệ';
             else if (field.name === 'weight'   && (num < 30  || num > 300)) errors.weight = 'Cân nặng không hợp lệ';
         }
@@ -113,7 +113,7 @@ export default function OnboardingForm({isLoggedIn = false}: {isLoggedIn?: boole
         setShowAuthStep(false);
     };
 
-    const [profile, setProfile] = useState(null);
+    const [profile, setProfile] = useState<ProfileResult | null>(null);
 
     useEffect(() => {
         const pendingData = localStorage.getItem('pendingOnboardingData');
@@ -125,7 +125,7 @@ export default function OnboardingForm({isLoggedIn = false}: {isLoggedIn?: boole
                 async function fetchProfile() {
                     const res = await getProfile();
                     if (res.status === 'success') {
-                        setProfile(res.data);
+                        setProfile(res.data as ProfileResult);
                     }
                 }
                 fetchProfile();
@@ -138,7 +138,9 @@ export default function OnboardingForm({isLoggedIn = false}: {isLoggedIn?: boole
         <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
             <div className="w-full bg-white rounded-3xl shadow-xl overflow-hidden">
                 {(isSuccess || profile) ? (
-                    <SuccessScreen data={actionState.status === 'success' ? actionState.data : profile} />                ) : (
+                    <SuccessScreen
+                        data={actionState.status === 'success' ? actionState.data : (profile as ProfileResult)}
+                    />              ) : (
                     <div>
                         <div className="h-1.5 w-full bg-gray-100">
                             <div
