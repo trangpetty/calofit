@@ -23,7 +23,7 @@ import Image from "next/image";
 const NAV_LINKS = [
     { name: 'Dashboard', href: '/dashboard' },
     { name: 'Food', href: '/food-log' },
-    { name: 'Workouts', href: '/workout' },
+    { name: 'Workout', href: '/workout' },
     { name: 'Progress', href: '/exercises' },
     { name: 'Reports', href: '/exercises' },
     { name: 'AI coach', href: '/exercises' },

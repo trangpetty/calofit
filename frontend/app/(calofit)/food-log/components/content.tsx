@@ -4,8 +4,6 @@ import React from 'react';
 import {Scan, Plus, Egg, Bread, Drop, FishSimple, BowlFood, OnigiriIcon} from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-
-// Import các component dùng chung (Nhớ trỏ đúng đường dẫn thư mục của bạn)
 import MetricCard from "@/app/(calofit)/dashboard/components/(cards)/metric_card";
 import BaseCard from "@/app/(calofit)/dashboard/components/(cards)/base_card";
 import {ButtonGetPremium} from "@/app/ui/button_premium";
