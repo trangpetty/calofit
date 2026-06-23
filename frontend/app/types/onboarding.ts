@@ -10,6 +10,8 @@ export interface ProfileFormData {
     weight: number | '';
     activityLevel: ActivityLevel | '';
     goal: Goal | '';
+    weightGoal?: number;
+    weightWeek?: number;
 }
 
 export interface ProfileResult {
@@ -24,14 +26,14 @@ export interface ProfileResult {
 export type StepErrors    = Partial<Record<keyof ProfileFormData, string>>;
 export type FormDataState = Partial<ProfileFormData>;
 
-export type OnboardingState =
-    | { status: 'idle' }
-    | { status: 'error';   message: string }
-    | { status: 'success'; data: ProfileResult };
-
+export interface OnboardingState {
+    status: 'idle' | 'success' | 'error';
+    message?: string;
+    data?: any;
+}
 // ── Config types ──────────────────────────────────────────────────────────────
 
-export type FieldType = 'number-input' | 'card-select' | 'icon-select';
+export type FieldType = 'number-input' | 'card-select' | 'icon-select' | 'text-input' | 'radio-select';
 
 export interface OptionItem {
     id:    string;
@@ -42,7 +44,7 @@ export interface OptionItem {
 
 export interface StepField {
     name:        keyof ProfileFormData;
-    label:       string;
+    label?:       string;
     subLabel?:   string;
     type:        FieldType;
     innerLabel?: string;
@@ -57,10 +59,5 @@ export interface StepConfig {
     title:  string;
     subTitle?: string;
     fields: StepField[];
-}
-
-export interface OnboardingState {
-    status: 'idle' | 'success' | 'error';
-    message?: string;
-    data?: any;
+    bottomTitle?: string;
 }

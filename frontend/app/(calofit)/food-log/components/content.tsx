@@ -14,10 +14,10 @@ export default function ContentFoodLog({ profile }: { profile: any }) {
         <div className="w-full max-w-5xl mx-auto p-4 min-h-screen text-gray-900 font-sans flex flex-col gap-6">
 
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                <MetricCard title="Ate" mainValue="1.240" subValue="/1.800 kcal" progressPercentage={68} footerText="" themeColor="green" icon={undefined} isFree={false} />
-                <MetricCard title="Protein" mainValue="68g" subValue="/154g" progressPercentage={44} footerText="" themeColor="blue" icon={undefined} isFree={false} />
-                <MetricCard title="Carb" mainValue="142g" subValue="/206g" progressPercentage={68} footerText="" themeColor="orange" icon={undefined} isFree={false} />
-                <MetricCard title="Fat" mainValue="34g" subValue="/69g" progressPercentage={49} footerText="" themeColor="cyan" icon={undefined} isFree={false} />
+                <MetricCard title="Ate" mainValue="1.240" subValue="/1.800 kcal" progressPercentage={68} footerText="" themeColor="green" icon={undefined} />
+                <MetricCard title="Protein" mainValue="68g" subValue="/154g" progressPercentage={44} footerText="" themeColor="blue" icon={undefined} />
+                <MetricCard title="Carb" mainValue="142g" subValue="/206g" progressPercentage={68} footerText="" themeColor="orange" icon={undefined} />
+                <MetricCard title="Fat" mainValue="34g" subValue="/69g" progressPercentage={49} footerText="" themeColor="cyan" icon={undefined} />
             </div>
 
             {/* 2. Search bar */}

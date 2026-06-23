@@ -5,7 +5,7 @@ import {MetricCardProps} from "@/app/types/dashboard";
 export default function MetricCard ({
                                         title, icon, mainValue, subValue,
                                         progressPercentage, footerText,
-                                        themeColor, footerColor
+                                        themeColor = 'green', footerColor
                                     }: MetricCardProps) {
     const colorStyles = {
         green: { text: 'text-emerald-500', bg: 'bg-emerald-500' },

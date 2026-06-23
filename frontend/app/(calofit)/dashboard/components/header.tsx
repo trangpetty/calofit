@@ -106,8 +106,8 @@ export default function Header() {
                                         <button className="flex items-center gap-2.5 p-1 pr-2 hover:bg-gray-50 text-white hover:text-emerald-600 rounded-full transition-colors outline-none focus-visible:ring-2 focus-visible:ring-emerald-500">
                                             <Avatar>
                                                 <AvatarImage
-                                                    src={session.user?.image}
-                                                    alt={session.user?.name}
+                                                    src={session.user?.image ?? undefined}
+                                                    alt={session.user?.name ?? ""}
                                                 />
                                                 <AvatarFallback>{session.user?.name}</AvatarFallback>
                                             </Avatar>
