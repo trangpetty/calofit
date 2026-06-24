@@ -1,25 +1,29 @@
 import {ReactNode} from "react";
 
-export type ThemColor = 'green' | 'blue' | 'orange' | 'cyan';
+export type ThemColor = 'green' | 'blue' | 'orange' | 'cyan' | 'purple';
 export type DayStatus = 'done' | 'current' | 'future';
 
 export interface MetricCardProps {
     title: string;
-    icon: ReactNode;
+    icon?: ReactNode;
     mainValue: string | ReactNode;
     subValue: string;
-    progressPercentage: number;
-    footerText: string;
+    progressPercentage?: number;
+    footerText?: string;
     themeColor?: ThemColor;
     footerColor?: string;
 }
 
 export interface BaseCardProps {
+    icon?: ReactNode;
     title: string;
     badge?: 'Free' | 'Premium';
     actionText?: string;
     onActionClick?: () => void;
     children: ReactNode;
+    isLocked?: boolean;
+    classNameBlur?: string;
+    classNameCard?: string;
 }
 
 export interface MacroData {

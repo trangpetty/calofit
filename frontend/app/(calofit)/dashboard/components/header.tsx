@@ -23,10 +23,10 @@ import Image from "next/image";
 const NAV_LINKS = [
     { name: 'Dashboard', href: '/dashboard' },
     { name: 'Food', href: '/food-log' },
-    { name: 'Workouts', href: '/workout' },
-    { name: 'Progress', href: '/exercises' },
-    { name: 'Reports', href: '/exercises' },
-    { name: 'AI coach', href: '/exercises' },
+    { name: 'Workout', href: '/workout' },
+    { name: 'Progress', href: '/progress' },
+    { name: 'Reports', href: '/reports' },
+    { name: 'AI coach', href: '/coach' },
 ];
 
 export default function Header() {
