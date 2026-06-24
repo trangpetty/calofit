@@ -2,15 +2,15 @@ spring:
   application:
     name: 'calofit-app'
   datasource:
-    url: jdbc:mysql://mysql-29df473e-trangpetty22072001-7d7d.b.aivencloud.com:13466/calofit_db?sslMode=REQUIRED&allowPublicKeyRetrieval=true
-    username: avnadmin
-    password: ${DB_PASSWORD}
+    url: jdbc:mysql://${DB_HOST}/${DB_NAME}?useSSL=true&requireSSL=true&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
     database-platform: org.hibernate.dialect.MySQLDialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     show-sql: false
     properties:
       hibernate:
@@ -21,12 +21,21 @@ spring:
     enabled: true
     baseline-on-migrate: true
     locations: classpath:db/migration
+    validate-on-migrate: true
 
   data:
     redis:
-      host: localhost
-      port: 6379
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      ssl:
+        enabled: ${REDIS_SSL:false}
+server:
+  port: ${PORT:8080}
 
 app:
+  jwt:
+    secret: ${JWT_SECRET}
+    expiration: 86400000
   google:
-    client-id: 978787902078-k4ghrb012l8pmkj9ts01274s62a7stuo.apps.googleusercontent.com
+    client-id: ${CLIENT_ID}
