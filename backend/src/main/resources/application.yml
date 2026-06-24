@@ -31,7 +31,7 @@ spring:
       ssl:
         enabled: ${REDIS_SSL:false}
 server:
-  port: ${PORT:8080}
+  port: ${PORT:10000}
 
 app:
   jwt:
