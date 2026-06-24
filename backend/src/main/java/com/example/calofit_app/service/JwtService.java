@@ -3,6 +3,7 @@ package com.example.calofit_app.service;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
@@ -12,7 +13,8 @@ import java.util.function.Function;
 
 @Service
 public class JwtService {
-    private static final String SECRET_STRING = "chuoibaomatdaonbangkytudaylacalofitapp2026";
+    @Value("${app.jwt.secret}")
+    private String SECRET_STRING;
     private final SecretKey secretKey = Keys.hmacShaKeyFor(SECRET_STRING.getBytes(StandardCharsets.UTF_8));
 
     private static final long ACCESS_TOKEN_EXPIRATION = 1000 * 60 * 15;
