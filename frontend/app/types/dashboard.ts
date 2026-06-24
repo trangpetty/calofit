@@ -15,13 +15,15 @@ export interface MetricCardProps {
 }
 
 export interface BaseCardProps {
+    icon?: ReactNode;
     title: string;
     badge?: 'Free' | 'Premium';
     actionText?: string;
     onActionClick?: () => void;
     children: ReactNode;
     isLocked?: boolean;
-    className?: string;
+    classNameBlur?: string;
+    classNameCard?: string;
 }
 
 export interface MacroData {

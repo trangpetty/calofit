@@ -121,7 +121,7 @@ export default function ContentProgress ({profile}: ContentProgressProps) {
                     </BaseCard>
 
                     {/* 30-day trend */}
-                    <BaseCard title="30-day weight trend" badge="Premium" isLocked={true} className="flex flex-col gap-3 col-span-3">
+                    <BaseCard title="30-day weight trend" badge="Premium" isLocked={true} classNameBlur="flex flex-col gap-3 col-span-3">
                         <div className="h-4 bg-gray-600 rounded w-3/4"></div>
                         <div className="h-4 bg-gray-600 rounded w-2/3"></div>
                         <div className="h-4 bg-gray-600 rounded w-1/2"></div>
