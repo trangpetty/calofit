@@ -12,6 +12,7 @@ export default function MetricCard ({
         blue: { text: 'text-blue-500', bg: 'bg-blue-500' },
         orange: { text: 'text-orange-500', bg: 'bg-orange-500' },
         cyan: { text: 'text-cyan-500', bg: 'bg-cyan-500' },
+        purple: { text: 'text-purple-500', bg: 'bg-purple-500' },
     }
 
     const activeColor = colorStyles[themeColor];
@@ -26,7 +27,7 @@ export default function MetricCard ({
             </div>
 
             {/* Main figures */}
-            <div className="flex flex-col flex-1 justify-end">
+            <div className="flex flex-col flex-1 justify-start items-start">
                 <span className="text-3xl font-bold text-gray-900 tracking-tight leading-none">
                     {mainValue}
                 </span>
@@ -36,17 +37,25 @@ export default function MetricCard ({
             </div>
 
             {/* Progress bar */}
-            <div className="w-full h-1.5 bg-gray-700 rounded-full overflow-hidden">
-                <div
-                    className={`h-full rounded-full transition-all duration-500 ease-out ${activeColor.bg}`}
-                    style={{ width: `${Math.min(progressPercentage, 100)}%` }}
-                ></div>
-            </div>
+            { progressPercentage ? (
+                <div className="w-full h-1.5 bg-gray-700 rounded-full overflow-hidden">
+                    <div
+                        className={`h-full rounded-full transition-all duration-500 ease-out ${activeColor.bg}`}
+                        style={{ width: `${Math.min(progressPercentage, 100)}%` }}
+                    ></div>
+                </div>
+            ) : (
+                <></>
+            )}
 
             {/* Footer */}
-            <div className={`text-xs font-semibold ${footerColor || activeColor.text}`}>
-                {footerText}
-            </div>
+            {footerText ? (
+                <div className={`text-xs font-semibold ${footerColor || activeColor.text}`}>
+                    {footerText}
+                </div>
+            ) : (
+                <></>
+            )}
 
         </div>
     )
