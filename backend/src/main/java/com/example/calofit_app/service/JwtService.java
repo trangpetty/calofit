@@ -13,7 +13,7 @@ import java.util.function.Function;
 
 @Service
 public class JwtService {
-    @Value("${app.jwt.secret}")
+    @Value("${JWT_SECRET}")
     private String SECRET_STRING;
     private final SecretKey secretKey = Keys.hmacShaKeyFor(SECRET_STRING.getBytes(StandardCharsets.UTF_8));
 
