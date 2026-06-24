@@ -6,6 +6,7 @@ import io.github.bucket4j.BucketConfiguration;
 import io.github.bucket4j.Refill;
 import io.github.bucket4j.redis.lettuce.cas.LettuceBasedProxyManager;
 import io.lettuce.core.RedisClient;
+import io.lettuce.core.RedisURI;
 import io.lettuce.core.api.StatefulRedisConnection;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
@@ -16,6 +17,9 @@ import java.time.Duration;
 
 @Service
 public class RateLimitingService {
+    @Value("${REDIS_URL}")
+    private String redisUrl;
+
     @Value("${spring.data.redis.host:localhost}")
     private String redisHost;
 
@@ -29,7 +33,9 @@ public class RateLimitingService {
     @PostConstruct
     public void init() {
         // Khởi tạo kết nối Redis
-        redisClient = RedisClient.create("redis://" + redisHost + ":" + redisPort);
+        RedisURI redisUri = RedisURI.create(redisUrl);
+        redisUri.setVerifyPeer(true);
+        redisClient = RedisClient.create(redisUri);
         redisConnection = redisClient.connect(new io.lettuce.core.codec.ByteArrayCodec());
 
         // Khởi tạo trình quản lý Proxy của Bucket4j đẩy dữ liệu vào Redis
