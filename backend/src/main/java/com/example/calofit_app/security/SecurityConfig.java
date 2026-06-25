@@ -35,7 +35,11 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("https://calofit-git-main-changs-projects-b87cdeaf.vercel.app"));
+        configuration.setAllowedOrigins(Arrays.asList(
+                "https://calofit-eight.vercel.app",
+                "https://calofit-git-main-changs-projects-b87cdeaf.vercel.app",
+                "http://localhost:3000"
+        ));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept"));
         configuration.setAllowCredentials(true);
