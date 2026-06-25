@@ -116,22 +116,26 @@ export default function OnboardingForm({isLoggedIn = false}: {isLoggedIn?: boole
     const [profile, setProfile] = useState<ProfileResult | null>(null);
 
     useEffect(() => {
+        if (!isLoggedIn) return;
+
         const pendingData = localStorage.getItem('pendingOnboardingData');
 
-        if (isLoggedIn) {
-            if (pendingData) {
-                handleAuthSuccess();
-            } else {
-                async function fetchProfile() {
+        if (pendingData) {
+            handleAuthSuccess();
+        } else {
+            async function fetchProfile() {
+                try {
                     const res = await getProfile();
-                    if (res.status === 'success') {
+                    if (res?.status === 'success') {
                         setProfile(res.data as ProfileResult);
                     }
+                } catch (error) {
+                    console.error("Lỗi khi fetch profile:", error);
                 }
-                fetchProfile();
             }
+            fetchProfile();
         }
-    }, []);
+    }, [isLoggedIn]);
     const isSuccess = actionState.status === 'success';
 
     return (
