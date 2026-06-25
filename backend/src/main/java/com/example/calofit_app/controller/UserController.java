@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.Objects;
 
 @Controller
-@RequestMapping("/api/v1/users")
+@RequestMapping("/users")
 public class UserController {
 
     @GetMapping("/profile")

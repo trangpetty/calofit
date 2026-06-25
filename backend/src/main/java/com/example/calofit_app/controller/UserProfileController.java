@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Slf4j
 @Controller
-@RequestMapping("/api/v1/profiles")
+@RequestMapping("/profiles")
 public class UserProfileController {
     private final UserProfileService userProfileService;
 
