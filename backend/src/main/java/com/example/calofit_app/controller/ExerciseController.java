@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/api/v1/features")
+@RequestMapping("/features")
 public class ExerciseController {
 
     @GetMapping("/history")
