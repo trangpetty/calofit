@@ -13,12 +13,14 @@ import java.util.function.Function;
 
 @Service
 public class JwtService {
-    @Value("${JWT_SECRET}")
-    private String SECRET_STRING;
-    private final SecretKey secretKey = Keys.hmacShaKeyFor(SECRET_STRING.getBytes(StandardCharsets.UTF_8));
+    private final SecretKey secretKey;
 
     private static final long ACCESS_TOKEN_EXPIRATION = 1000 * 60 * 15;
     private static final long REFRESH_TOKEN_EXPIRATION = 1000 * 60 * 60 * 24 * 7;
+
+    public JwtService(@Value("${app.jwt.secret}") String secretString) {
+        this.secretKey = Keys.hmacShaKeyFor(secretString.getBytes(StandardCharsets.UTF_8));
+    }
 
     public String generateAccessToken(String email, String role) {
         return Jwts.builder()
