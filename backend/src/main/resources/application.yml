@@ -30,6 +30,7 @@ spring:
       password: ${REDIS_PASSWORD}
       ssl:
         enabled: ${REDIS_SSL}
+      url: ${REDIS_URL:redis://localhost:6379}
 
   security:
     user:

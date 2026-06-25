@@ -56,21 +56,18 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        // 1. NHỮNG API PUBLIC (Ai cũng vào được)
-                        .requestMatchers("/api/v1/auth/**").permitAll() // Mở toàn bộ các đường dẫn có đuôi auth
-                        .requestMatchers("/error").permitAll() // Mở trang báo lỗi mặc định của Spring
-
-                        // 2. NHỮNG API CÒN LẠI (Phải có Token hợp lệ)
+                        .requestMatchers("/auth/**", "/api/v1/auth/**").permitAll()
+                        .requestMatchers("/error").permitAll() // Hứng lỗi 500/404 thật để không bị 403 ảo
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(rateLimitingFilter, UsernamePasswordAuthenticationFilter.class)
-                // Qua được lá chắn Spam mới tới lá chắn kiểm tra Token
-                .addFilterAfter(jwtAuthenticationFilter, RateLimitingFilter.class);        return http.build();
+                .addFilterAfter(jwtAuthenticationFilter, RateLimitingFilter.class);
+        return http.build();
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(); // Dùng BCrypt mã hóa mật khẩu trong bảng users
+        return new BCryptPasswordEncoder();
     }
 
 
