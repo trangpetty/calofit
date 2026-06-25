@@ -39,6 +39,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String jwt;
         final String userEmail;
 
+        if (request.getServletPath().contains("/api/v1/auth")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         // 1. Kiểm tra xem Request có chứa header Authorization mang chuẩn Bearer không
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response); // Không có thì cho qua (để Security config quyết định chặn hay không)
