@@ -30,8 +30,15 @@ spring:
       password: ${REDIS_PASSWORD}
       ssl:
         enabled: ${REDIS_SSL}
+
+  security:
+    user:
+      name: admin
+      password: 123
 server:
   port: ${PORT:8080}
+  servlet:
+    context-path: /api/v1
 
 app:
   jwt:
