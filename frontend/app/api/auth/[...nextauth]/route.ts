@@ -3,7 +3,9 @@ import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 const isProd = process.env.NODE_ENV === 'production';
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api/v1';
+// const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api/v1';
+const BASE_URL = 'http://localhost:8080/api/v1';
+
 const PROD_DOMAIN = process.env.NEXTAUTH_URL
     ? new URL(process.env.NEXTAUTH_URL).hostname
     : undefined;
