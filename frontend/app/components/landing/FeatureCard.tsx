@@ -9,7 +9,7 @@ export default function FeatureCard ({ title, description, icon, colorTheme }: F
     };
 
     return (
-        <div className="flex flex-col items-start gap-4 p-6  rounded-3xl transition-all border border-transparent shadow-lg">
+        <div className="flex flex-col items-start gap-4 p-6 bg-white  rounded-3xl transition-all border border-transparent shadow-lg">
             <div className={`p-4 rounded-2xl ${colorClasses[colorTheme]}`}>
                 {icon}
             </div>

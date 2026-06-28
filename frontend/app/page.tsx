@@ -18,6 +18,7 @@ import PricingCard from "@/app/components/landing/PricingCard";
 import FaqItem from "@/app/components/landing/FaqItem";
 import {useState} from "react";
 import Footer from "@/app/components/landing/Footer";
+import Image from "next/image";
 
 export default function Home() {
 
@@ -120,7 +121,7 @@ export default function Home() {
         {
             id: 1,
             title: "Free",
-            titleColor: "text-white",
+            titleColor: "text-emerald-600",
             price: "0đ",
             duration: "mãi mãi",
             description: "Đủ dùng để cảm nhận giá trị",
@@ -135,7 +136,7 @@ export default function Home() {
             ],
             buttonText: "Bắt đầu miễn phí",
             buttonIcon: <LinkSimpleIcon size={20} weight="bold" />,
-            buttonClasses: "bg-transparent border border-[#3f3f46] text-white hover:bg-[#3f3f46]"
+            buttonClasses: "bg-emerald-600 border border-emerald-600 text-white hover:bg-emerald-700"
         },
         {
             id: 2,
@@ -293,7 +294,7 @@ export default function Home() {
             </section>
 
             {/*   Section 4  */}
-            <section className="bg-gray-50 py-10 md:py-14">
+            <section className="bg-emerald-50 py-10 md:py-14">
                 <div className="max-w-5xl mx-auto px-6">
                     <div className="mb-12">
                         <p className="text-emerald-600 font-bold uppercase tracking-wider text-sm mb-2">
@@ -320,13 +321,13 @@ export default function Home() {
             </section>
 
             {/* Section 5 */}
-            <section className="bg-[#18181b] py-10 md:py-14"> {/* Tương đương bg-zinc-900 */}
+            <section className="py-10 md:py-14">
                 <div className="max-w-5xl mx-auto px-6">
                     <div className="mb-10">
                         <p className="text-emerald-500 font-bold uppercase tracking-wider text-sm mb-2">
                             So sánh
                         </p>
-                        <h2 className="text-white text-3xl md:text-4xl font-bold">
+                        <h2 className="text-gray-900 text-3xl md:text-4xl font-bold">
                             Tại sao chọn Calofit?
                         </h2>
                     </div>
@@ -394,13 +395,13 @@ export default function Home() {
             </section>
 
             {/*  Section 6: Review  */}
-            <section className="bg-[#18181b] py-10 md:py-14">
+            <section className="bg-emerald-50 py-10 md:py-14">
                 <div className="max-w-5xl mx-auto px-6">
                     <div className="mb-10">
                         <p className="text-emerald-500 font-bold uppercase tracking-wider text-sm mb-2">
                             Người dùng nói gì
                         </p>
-                        <h2 className="text-white text-3xl md:text-4xl font-bold">
+                        <h2 className="text-gray-900 text-3xl md:text-4xl font-bold">
                             Hàng nghìn người Việt đang dùng Calofit
                         </h2>
                     </div>
@@ -422,13 +423,13 @@ export default function Home() {
             </section>
 
             {/*  Section 7: Price  */}
-            <section className="bg-[#18181b] py-10 md:py-14">
+            <section className="bg-white py-10 md:py-14">
                 <div className="max-w-5xl mx-auto px-6">
                     <div className="mb-12">
                         <p className="text-emerald-500 font-bold uppercase tracking-wider text-sm mb-2">
                             Bảng giá
                         </p>
-                        <h2 className="text-white text-3xl md:text-4xl font-bold">
+                        <h2 className="text-grya-900 text-3xl md:text-4xl font-bold">
                             Bắt đầu miễn phí, nâng cấp khi cần
                         </h2>
                     </div>
@@ -456,7 +457,7 @@ export default function Home() {
             </section>
 
             {/*  Section 8: Q&A  */}
-            <section className="bg-gray-50 py-16 md:py-24">
+            <section className="bg-emerald-50 py-16 md:py-24">
                 <div className="max-w-3xl mx-auto px-6">
                     <div className="text-center mb-12">
                         <h2 className="text-gray-900 text-3xl md:text-5xl font-bold mb-4">
@@ -483,13 +484,13 @@ export default function Home() {
             </section>
 
             {/*  Section 9: Start  */}
-            <section className="bg-[#18181b] py-20 md:py-32 border-t border-[#27272a]">
+            <section className="bg-white py-14 md:py-32">
                 <div className="max-w-3xl mx-auto px-6 flex flex-col items-center text-center">
-                    <div className="w-16 h-16 bg-emerald-500 rounded-2xl flex items-center justify-center text-white mb-6 shadow-lg shadow-emerald-500/20">
-                        <FlameIcon size={32} weight="fill" />
+                    <div className="w-20 h-20 bg-emerald-500 rounded-2xl text-white flex items-center justify-center text-gray-900 mb-6 shadow-lg shadow-emerald-500/20">
+                        <Image src="/images/logo-icon.svg" width={180} height={100} className="w-full h-auto" alt="Calofit Logo" />
                     </div>
 
-                    <h2 className="text-white text-3xl md:text-4xl font-bold mb-4">
+                    <h2 className="text--gray-900 text-3xl md:text-4xl font-bold mb-4">
                         Sẵn sàng bắt đầu?
                     </h2>
                     <p className="text-zinc-400 text-lg md:text-xl mb-10">
@@ -497,13 +498,13 @@ export default function Home() {
                     </p>
 
                     <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-                        <button className="flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl border border-[#3f3f46] bg-transparent text-white font-bold hover:bg-[#27272a] transition-colors w-full sm:w-auto">
-                            <RocketLaunchIcon size={20} weight="bold" className="text-zinc-300" />
+                        <button className="flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl border-2 border-emerald-600 bg-transparent text-emerald-600 font-bold hover:bg-emerald-700 hover:text-white transition-colors w-full sm:w-auto">
+                            <RocketLaunchIcon size={20} weight="bold" className="text-emerald-600 hover:text-white" />
                             Tạo tài khoản miễn phí
                         </button>
 
-                        <button className="flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl border border-[#3f3f46] bg-transparent text-white font-bold hover:bg-[#27272a] transition-colors w-full sm:w-auto">
-                            <UserCircleCheckIcon size={20} weight="bold" className="text-zinc-300" />
+                        <button className="flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl border-2 border-emerald-600 bg-transparent text-emerald-600 font-bold hover:bg-emerald-700 hover:text-white transition-colors w-full sm:w-auto">
+                            <UserCircleCheckIcon size={20} weight="bold" className="text-emerald-600 hover:text-white" />
                             Tìm hiểu With PT
                         </button>
                     </div>

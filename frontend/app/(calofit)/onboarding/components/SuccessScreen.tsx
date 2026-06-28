@@ -1,7 +1,5 @@
-// app/onboarding/components/SuccessScreen.tsx
-
-import { useRouter } from 'next/navigation';
 import { ProfileResult } from '@/app/types/onboarding';
+import Link from "next/link";
 
 const CheckCircle = () => (
     <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -15,7 +13,6 @@ interface Props {
 }
 
 export function SuccessScreen({ data }: Props) {
-    const router = useRouter();
 
     return (
         <div className="flex flex-col items-center text-center animate-fade-in-up p-8">
@@ -55,11 +52,9 @@ export function SuccessScreen({ data }: Props) {
                 </div>
             </div>
 
-            <button
-                className="w-full bg-emerald-600 text-white font-medium py-4 rounded-xl mt-6 hover:bg-emerald-700 transition-colors shadow-lg shadow-emerald-200"
-            >
+            <Link href="/dashboard" className="w-full bg-emerald-600 text-white font-medium py-4 rounded-xl mt-6 hover:bg-emerald-700 transition-colors shadow-lg shadow-emerald-200">
                 Bắt đầu theo dõi hành trình
-            </button>
+            </Link>
         </div>
     );
 }
