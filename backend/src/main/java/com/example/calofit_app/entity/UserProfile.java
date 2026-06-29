@@ -5,6 +5,8 @@ import com.example.calofit_app.entity.enums.Gender;
 import com.example.calofit_app.entity.enums.Goal;
 import jakarta.persistence.*;
 import lombok.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 
 @Entity
@@ -65,4 +67,23 @@ public class UserProfile {
 
     @Column(name = "fat_target")
     private Double fatTarget; // (Gram)
+
+    @Column(name = "start_weight", nullable = false)
+    private Double startWeight;
+    // Cân nặng lúc vừa đăng ký (Dùng làm mốc 0% để tính phần trăm tiến độ)
+
+    @Column(name = "target_weight")
+    private Double targetWeight;
+    // Cân nặng mục tiêu (Dùng làm mốc 100%. Nếu goal là MAINTAIN thì bằng luôn startWeight)
+
+    @Column(name = "current_weight")
+    private Double currentWeight;
+
+    @Column(name = "weekly_goal_rate")
+    private Double weeklyGoalRate;
+    // Tốc độ thay đổi (kg/tuần). Ví dụ: 0.25, 0.5, 0.75, 1.0.
+    // Dùng để tính toán "Projected date" (ngày dự kiến) và chia "Weekly target"
+
+    @Column(name = "start_date")
+    private LocalDateTime startDate;
 }

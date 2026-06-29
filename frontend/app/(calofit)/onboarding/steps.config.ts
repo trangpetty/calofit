@@ -92,7 +92,7 @@ export const STEPS: StepConfig[] = [
                 step:        0.1,
             },
             {
-                name:        'weightGoal',
+                name:        'targetWeight',
                 label:       'What\'s your goal weight?',
                 subLabel:    'Don\'t worry. This doesn\'t affect your daily calorie goal and you can always change it later.',
                 type:        'number-input',
@@ -108,7 +108,7 @@ export const STEPS: StepConfig[] = [
         subTitle: 'Let\'s break down your overall health goal into a weekly one you can maintain. Slow-and-steady is best!',
         fields: [
             {
-                name:    'weightWeek',
+                name:    'weeklyGoalRate',
                 label:   '',
                 type:    'card-select',
                 cols:    1,

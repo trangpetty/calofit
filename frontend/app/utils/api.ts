@@ -1,4 +1,5 @@
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api/v1';
+// const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api/v1';
+const BASE_URL = 'http://localhost:8080/api/v1';
 
 async function fetchApi<T>(endpoint: string, method: string, body?: any, token?: string, customOptions?: RequestInit): Promise<T> {
     const headers: Record<string, string> = {

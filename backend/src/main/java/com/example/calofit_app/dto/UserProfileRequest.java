@@ -13,4 +13,6 @@ public class UserProfileRequest {
     private Double height;
     private ActivityLevel activityLevel;
     private Goal goal;
+    private Double targetWeight;
+    private Double weeklyGoalRate;
 }

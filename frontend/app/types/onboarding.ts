@@ -10,8 +10,8 @@ export interface ProfileFormData {
     weight: number | '';
     activityLevel: ActivityLevel | '';
     goal: Goal | '';
-    weightGoal?: number;
-    weightWeek?: number;
+    targetWeight?: number;
+    weeklyGoalRate?: number;
 }
 
 export interface ProfileResult {

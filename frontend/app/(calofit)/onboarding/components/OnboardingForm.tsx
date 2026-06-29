@@ -8,6 +8,7 @@ import { StepRenderer }  from './StepRenderer';
 import { StepNavigation } from './StepNavigation';
 import { SuccessScreen }  from './SuccessScreen';
 import {AuthStep} from "@/app/(calofit)/onboarding/components/AuthStep";
+import {useSession} from "next-auth/react";
 
 function validateStep(stepIndex: number, data: FormDataState): StepErrors {
     const errors: StepErrors = {};
@@ -46,6 +47,7 @@ export default function OnboardingForm({isLoggedIn = false}: {isLoggedIn?: boole
     const [errors, setErrors]           = useState<StepErrors>({});
     const [formData, setFormData]       = useState<FormDataState>({});
     const [showAuthStep, setShowAuthStep] = useState(false);
+    const { data: session, status } = useSession();
 
     const totalSteps = STEPS.length;
 
@@ -103,6 +105,8 @@ export default function OnboardingForm({isLoggedIn = false}: {isLoggedIn?: boole
 
     const handleAuthSuccess = () => {
         const pendingData = localStorage.getItem('pendingOnboardingData');
+        console.log("handleAuthSuccess được gọi, data là:", pendingData);
+
         if (pendingData) {
             const parsedData = JSON.parse(pendingData);
             startTransition(() => {
@@ -116,7 +120,7 @@ export default function OnboardingForm({isLoggedIn = false}: {isLoggedIn?: boole
     const [profile, setProfile] = useState<ProfileResult | null>(null);
 
     useEffect(() => {
-        if (!isLoggedIn) return;
+        if (status !== 'authenticated') return;
 
         const pendingData = localStorage.getItem('pendingOnboardingData');
 
@@ -135,7 +139,7 @@ export default function OnboardingForm({isLoggedIn = false}: {isLoggedIn?: boole
             }
             fetchProfile();
         }
-    }, [isLoggedIn]);
+    }, [status]);
     const isSuccess = actionState.status === 'success';
 
     return (
