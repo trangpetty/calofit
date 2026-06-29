@@ -8,6 +8,7 @@ import {
     XLogo,
     TiktokLogo
 } from '@phosphor-icons/react';
+import Link from "next/link";
 
 export default function Footer() {
     // Dữ liệu cho các cột Links giúp code gọn gàng hơn
@@ -30,9 +31,9 @@ export default function Footer() {
                             Nuôi dưỡng cơ thể, theo cách của bạn.
                         </p>
 
-                        <button className="bg-white text-emerald-600 hover:bg-slate-50 transition-colors font-bold py-3 px-6 rounded-full flex items-center gap-2 uppercase tracking-wide text-sm">
+                        <Link href="/onboarding" className="bg-white text-emerald-600 hover:bg-slate-50 transition-colors font-bold py-3 px-6 rounded-full flex items-center gap-2 uppercase tracking-wide text-sm">
                             Bắt đầu ngay <CaretRight size={18} weight="bold" />
-                        </button>
+                        </Link>
                     </div>
 
                     {/* Resources */}

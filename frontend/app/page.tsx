@@ -7,7 +7,7 @@ import {
     BrainIcon,
     Calculator,
     CaretRightIcon,
-    ChartLineUp, FlameIcon, SparkleIcon,
+    ChartLineUp, SparkleIcon,
     TrophyIcon, UserCircleCheckIcon, XIcon, LinkSimpleIcon, RocketLaunchIcon
 } from "@phosphor-icons/react";
 import Card from "@/app/components/landing/Card";
@@ -19,6 +19,7 @@ import FaqItem from "@/app/components/landing/FaqItem";
 import {useState} from "react";
 import Footer from "@/app/components/landing/Footer";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
 
@@ -125,7 +126,7 @@ export default function Home() {
             price: "0đ",
             duration: "mãi mãi",
             description: "Đủ dùng để cảm nhận giá trị",
-            borderColor: "border-transparent",
+            borderColor: "border-emerald-300",
             isPopular: false,
             features: [
                 { text: "Log tất cả bữa ăn", included: true },
@@ -136,7 +137,8 @@ export default function Home() {
             ],
             buttonText: "Bắt đầu miễn phí",
             buttonIcon: <LinkSimpleIcon size={20} weight="bold" />,
-            buttonClasses: "bg-emerald-600 border border-emerald-600 text-white hover:bg-emerald-700"
+            buttonClasses: "bg-emerald-600 border border-emerald-600 text-white hover:bg-emerald-700",
+            link: '/onboarding',
         },
         {
             id: 2,
@@ -156,7 +158,8 @@ export default function Home() {
             ],
             buttonText: "Thử 7 ngày miễn phí",
             buttonIcon: <SparkleIcon size={20} weight="fill" />,
-            buttonClasses: "bg-[#8b5cf6] text-white hover:bg-[#7c3aed]"
+            buttonClasses: "bg-[#8b5cf6] text-white hover:bg-[#7c3aed]",
+            link: '/',
         },
         {
             id: 3,
@@ -165,7 +168,7 @@ export default function Home() {
             price: "299k",
             duration: "/tháng",
             description: "Premium + huấn luyện viên thật",
-            borderColor: "border-transparent",
+            borderColor: "border-blue-300",
             isPopular: false,
             features: [
                 { text: "Tất cả tính năng Premium", included: true },
@@ -175,7 +178,8 @@ export default function Home() {
             ],
             buttonText: "Tìm PT ngay",
             buttonIcon: <UserCircleCheckIcon size={20} weight="fill" />,
-            buttonClasses: "bg-[#3b82f6] text-white hover:bg-[#2563eb]"
+            buttonClasses: "bg-[#3b82f6] text-white hover:bg-[#2563eb]",
+            link: '/',
         }
     ];
 
@@ -209,14 +213,14 @@ export default function Home() {
       <HeaderLayout />
         <main>
             <section className="w-full bg-emerald-600">
-                <div className="max-w-5xl mx-auto px-6 py-12 md:py-24 flex flex-col md:flex-row items-center justify-between gap-12">
+                <div className="max-w-5xl mx-auto px-6 py-10 md:py-24 flex flex-col md:flex-row items-center justify-between gap-12">
                     <div className="flex flex-col items-start text-left w-full md:w-1/2 gap-6">
-                        <div className="inline-flex items-center gap-2 py-2 px-5 rounded-full bg-emerald-100 text-emerald-700 font-bold uppercase text-sm md:text-base">
+                        <div className="inline-flex items-center gap-2 py-2 px-5 rounded-full bg-emerald-100 text-emerald-700 font-bold uppercase text-xs md:text-base">
                             <TrophyIcon size={24} weight="bold" />
                             <span>App dinh dưỡng & gym cho người Việt</span>
                         </div>
 
-                        <h1 className="text-white text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
+                        <h1 className="text-white text-3xl md:text-5xl lg:text-6xl font-bold leading-tight">
                             Ăn đúng, tập đúng, đạt vóc dáng <span className="underline decoration-emerald-300 underline-offset-8">mơ ước</span>
                         </h1>
 
@@ -224,14 +228,14 @@ export default function Home() {
                             Log bữa ăn tiếng Việt trong 10 giây. Tính TDEE chính xác. Lịch tập thông minh. Tất cả miễn phí — không blur, không quảng cáo.
                         </p>
 
-                        <button className="flex items-center gap-2 bg-white text-emerald-700 rounded-full py-4 px-8 text-lg font-bold uppercase hover:bg-emerald-50 transition-colors shadow-lg mt-2">
+                        <Link href="/onboarding" className="flex items-center gap-2 bg-white text-emerald-700 rounded-full py-4 px-8 text-lg font-bold uppercase hover:bg-emerald-50 transition-colors shadow-lg mt-2">
                             Start today <CaretRightIcon size={24} weight="bold" />
-                        </button>
+                        </Link>
                     </div>
 
                     <div className="w-full md:w-1/2 flex justify-center md:justify-end">
                         <div className="relative w-[300px] h-[600px] bg-white rounded-[40px] shadow-2xl border-[8px] border-emerald-800 flex items-center justify-center text-gray-500 overflow-hidden transform md:-rotate-2 transition-transform hover:rotate-0">
-                            <p>Ảnh Mockup App</p>
+                            <Image src="/images/mockup.png" width={180} height={100} alt="Mockup App" className="w-full h-full bg-cover object-cover object-top"/>
                         </div>
                     </div>
                 </div>
@@ -305,15 +309,19 @@ export default function Home() {
                         </h2>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12">
+                    <div className="flex md:grid md:grid-cols-2 gap-6 md:gap-12 overflow-x-auto md:overflow-visible snap-x snap-mandatory items-stretch pb-4 md:pb-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                         {featuresData.map((feature) => (
-                            <FeatureCard
+                            <div
                                 key={feature.id}
-                                title={feature.title}
-                                description={feature.description}
-                                icon={feature.icon}
-                                colorTheme={feature.colorTheme}
-                            />
+                                className="w-[80%] sm:w-[60%] shrink-0 snap-center md:w-auto md:shrink"
+                            >
+                                <FeatureCard
+                                    title={feature.title}
+                                    description={feature.description}
+                                    icon={feature.icon}
+                                    colorTheme={feature.colorTheme}
+                                />
+                            </div>
                         ))}
                     </div>
 
@@ -332,17 +340,17 @@ export default function Home() {
                         </h2>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+                    <div className="md:grid md:grid-cols-2 gap-6 items-stretch flex overflow-x-auto md:overflow-visible snap-x snap-mandatory md:pb-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
 
                         {/* ======================================= */}
                         {/* CARD 1: MyFitnessPal */}
                         {/* ======================================= */}
-                        <div className="bg-[#27272a] border border-[#3f3f46] rounded-2xl p-6 md:p-8">
+                        <div className="w-[80%] sm:w-[60%] shrink-0 snap-center md:w-auto md:shrink rounded-2xl p-6 md:p-8 shadow-lg border border-emerald-300">
                             <div className="flex items-center gap-4 mb-6">
-                                <div className="w-10 h-10 rounded-lg bg-[#18181b] flex items-center justify-center text-zinc-400">
+                                <div className="w-10 h-10 rounded-lg  flex items-center justify-center text-emerald-400">
                                     <XIcon size={20} weight="bold" />
                                 </div>
-                                <h3 className="text-xl font-bold text-white">MyFitnessPal</h3>
+                                <h3 className="text-xl font-bold">MyFitnessPal</h3>
                             </div>
 
                             <hr className="border-[#3f3f46] mb-6" />
@@ -350,8 +358,8 @@ export default function Home() {
                             <ul className="flex flex-col gap-4">
                                 {competitorFeatures.map((feature, index) => (
                                     <li key={index} className="flex items-start gap-3">
-                                        <XIcon size={20} weight="bold" className="text-zinc-400 shrink-0 mt-0.5" />
-                                        <span className="text-zinc-300 font-medium">{feature}</span>
+                                        <XIcon size={20} weight="bold" className="text-emerald-400 shrink-0 mt-0.5" />
+                                        <span className="font-medium">{feature}</span>
                                     </li>
                                 ))}
                             </ul>
@@ -360,13 +368,13 @@ export default function Home() {
                         {/* ======================================= */}
                         {/* CARD 2: Calofit */}
                         {/* ======================================= */}
-                        <div className="bg-[#27272a] border-2 border-emerald-500 rounded-2xl p-6 md:p-8 relative">
+                        <div className="w-[80%] sm:w-[60%] shrink-0 snap-center md:w-auto md:shrink shadow-lg rounded-2xl p-6 md:p-8 relative border border-emerald-300">
                             <div className="flex items-center justify-between mb-6">
                                 <div className="flex items-center gap-4">
-                                    <div className="w-10 h-10 rounded-lg bg-emerald-500 flex items-center justify-center text-white">
-                                        <FlameIcon size={20} weight="fill" />
+                                    <div className="w-10 h-10 rounded-lg bg-emerald-500 flex items-center justify-center text-emerald-600">
+                                        <Image src="/images/logo-icon.svg" width={180} height={100} alt="Calofit Logo" />
                                     </div>
-                                    <h3 className="text-xl font-bold text-white">Calofit</h3>
+                                    <h3 className="text-xl font-bold">Calofit</h3>
                                 </div>
                                 <span className="bg-emerald-100 text-emerald-800 text-xs font-bold px-2 py-1 rounded-md">
                                 Tốt hơn
@@ -380,9 +388,9 @@ export default function Home() {
                                     <li key={index} className="flex items-start justify-between gap-3">
                                         <div className="flex items-start gap-3">
                                             <CheckIcon size={20} className="text-emerald-500 shrink-0 mt-0.5 font-bold" />
-                                            <span className="text-white font-medium">{item.text}</span>
+                                            <span className="font-medium">{item.text}</span>
                                         </div>
-                                        <span className="shrink-0 bg-[#dcfce7] text-emerald-800 text-xs font-bold px-2 py-1 rounded-md">
+                                        <span className="shrink-0 bg-emerald-100 text-emerald-800 text-xs font-bold px-2 py-1 rounded-md">
                                         {item.badge}
                                     </span>
                                     </li>
@@ -406,16 +414,21 @@ export default function Home() {
                         </h2>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
+                    <div className="md:grid md:grid-cols-3 gap-6 items-stretch flex overflow-x-auto md:overflow-visible snap-x snap-mandatory md:pb-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                         {reviews.map((review) => (
-                            <ReviewCard
+                            <div
                                 key={review.id}
-                                quote={review.quote}
-                                initials={review.initials}
-                                name={review.name}
-                                location={review.location}
-                                avatarColor={review.avatarColor}
-                            />
+                                className="w-[80%] sm:w-[60%] shrink-0 snap-center md:w-auto md:shrink"
+                            >
+                                <ReviewCard
+                                    key={review.id}
+                                    quote={review.quote}
+                                    initials={review.initials}
+                                    name={review.name}
+                                    location={review.location}
+                                    avatarColor={review.avatarColor}
+                                />
+                            </div>
                         ))}
                     </div>
 
@@ -434,22 +447,27 @@ export default function Home() {
                         </h2>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 items-stretch">
+                    <div className="pt-6 flex md:grid md:grid-cols-3 gap-6 md:gap-8 overflow-x-auto md:overflow-visible snap-x snap-mandatory items-stretch pb-4 md:pb-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                         {plans.map((plan) => (
-                            <PricingCard
+                            <div
                                 key={plan.id}
-                                title={plan.title}
-                                titleColor={plan.titleColor}
-                                price={plan.price}
-                                duration={plan.duration}
-                                description={plan.description}
-                                features={plan.features}
-                                buttonText={plan.buttonText}
-                                buttonIcon={plan.buttonIcon}
-                                buttonClasses={plan.buttonClasses}
-                                isPopular={plan.isPopular}
-                                borderColor={plan.borderColor}
-                            />
+                                className="w-[85%] sm:w-[60%] shrink-0 snap-center md:w-auto md:shrink"
+                            >
+                                <PricingCard
+                                    title={plan.title}
+                                    titleColor={plan.titleColor}
+                                    price={plan.price}
+                                    duration={plan.duration}
+                                    description={plan.description}
+                                    features={plan.features}
+                                    buttonText={plan.buttonText}
+                                    buttonIcon={plan.buttonIcon}
+                                    buttonClasses={plan.buttonClasses}
+                                    isPopular={plan.isPopular}
+                                    borderColor={plan.borderColor}
+                                    link={plan.link}
+                                />
+                            </div>
                         ))}
                     </div>
 
@@ -486,7 +504,7 @@ export default function Home() {
             {/*  Section 9: Start  */}
             <section className="bg-white py-14 md:py-32">
                 <div className="max-w-3xl mx-auto px-6 flex flex-col items-center text-center">
-                    <div className="w-20 h-20 bg-emerald-500 rounded-2xl text-white flex items-center justify-center text-gray-900 mb-6 shadow-lg shadow-emerald-500/20">
+                    <div className="w-20 h-20 bg-emerald-500 rounded-2xl flex items-center justify-center text-gray-900 mb-6 shadow-lg shadow-emerald-500/20">
                         <Image src="/images/logo-icon.svg" width={180} height={100} className="w-full h-auto" alt="Calofit Logo" />
                     </div>
 
@@ -498,11 +516,10 @@ export default function Home() {
                     </p>
 
                     <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-                        <button className="flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl border-2 border-emerald-600 bg-transparent text-emerald-600 font-bold hover:bg-emerald-700 hover:text-white transition-colors w-full sm:w-auto">
+                        <Link href="/onboarding" className="flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl border-2 border-emerald-600 bg-transparent text-emerald-600 font-bold hover:bg-emerald-700 hover:text-white transition-colors w-full sm:w-auto">
                             <RocketLaunchIcon size={20} weight="bold" className="text-emerald-600 hover:text-white" />
                             Tạo tài khoản miễn phí
-                        </button>
-
+                        </Link>
                         <button className="flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl border-2 border-emerald-600 bg-transparent text-emerald-600 font-bold hover:bg-emerald-700 hover:text-white transition-colors w-full sm:w-auto">
                             <UserCircleCheckIcon size={20} weight="bold" className="text-emerald-600 hover:text-white" />
                             Tìm hiểu With PT

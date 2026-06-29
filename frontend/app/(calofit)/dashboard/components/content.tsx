@@ -57,12 +57,12 @@ export default function ContentDashBoard ({profile}: {profile: any}) {
         }
     ];
     return (
-        <main className="max-w-5xl mx-auto px-6 mt-8 space-y-6">
+        <main className="max-w-5xl mx-auto md:px-6 px-2 md:mt-8 mt-4 space-y-6">
             {session ?
                 (
                     <main>
                         {/* introduce of AI */}
-                        <div className="bg-violet-200 lg:p-3 p-3 lg:my-4 my-2 rounded-lg flex items-center justify-between">
+                        <div className="bg-violet-200 lg:p-3 p-3 lg:my-4 my-2 rounded-lg flex items-center justify-between flex-wrap gap-4">
                             <div className="flex items-center">
                                 <SparkleIcon size={24} weight="bold" className="text-violet-600"/>
                                 <p className="text-gray-900 lg:text-base text-sm mx-3">

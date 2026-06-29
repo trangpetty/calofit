@@ -34,6 +34,7 @@ export interface PricingCardProps {
     buttonClasses: string;
     isPopular: boolean;
     borderColor: string;
+    link: string;
 }
 
 export interface FaqItemProps {

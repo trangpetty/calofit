@@ -11,7 +11,6 @@ interface Props {
 }
 
 export function StepRenderer({ config, data, errors, onChange }: Props) {
-    const widthStep = "500px";
     const parseText = (text?: string) => {
         if(!text) return '';
         return text.replace('{{name}}', data.name ? String(data.name) : '');
@@ -21,8 +20,8 @@ export function StepRenderer({ config, data, errors, onChange }: Props) {
     const dynamicSubTitle = parseText(config.subTitle);
 
     return (
-        <div className="space-y-6" style={{ width: widthStep }}>
-            <h2 className="text-2xl font-bold text-gray-800 text-center m-0">
+        <div className="space-y-6 w-full">
+            <h2 className="md:text-2xl text-base font-bold text-gray-800 text-center m-0">
                 {dynamicTitle}
             </h2>
             <p className="text-gray-500 text-sm text-center mt-2">
@@ -39,7 +38,7 @@ export function StepRenderer({ config, data, errors, onChange }: Props) {
                         <input type="hidden" name={field.name} value={value?.toString() ?? ''} />
 
                         {field.label && (
-                            <label className="block text-lg text-gray-800 mb-2">
+                            <label className="block md:text-lg text-sm text-gray-800 mb-2">
                                 {field.label}
                             </label>
                         )}
@@ -52,7 +51,7 @@ export function StepRenderer({ config, data, errors, onChange }: Props) {
                         {/* ── number-input ── */}
                         {field.type === 'number-input' && (
                             <div>
-                                <div className="relative mt-2 mt-3 max-w-[320px]">
+                                <div className="relative mt-3 max-w-[320px]">
                                     {field.innerLabel && (
                                         <span className="absolute -top-2.5 left-3 bg-white px-1 text-xs text-gray-500 z-10">
                                             {field.innerLabel}
@@ -159,9 +158,9 @@ export function StepRenderer({ config, data, errors, onChange }: Props) {
                                                 : 'border-gray-200 hover:border-emerald-200 hover:bg-gray-50'
                                         }`}
                                     >
-                                        <div className="font-medium text-gray-800">{opt.label}</div>
+                                        <div className="font-medium md:text-base text-sm text-gray-800">{opt.label}</div>
                                         {opt.desc && (
-                                            <div className="text-sm text-gray-500 mt-1">{opt.desc}</div>
+                                            <div className="md:text-sm text-xs text-gray-500 mt-1">{opt.desc}</div>
                                         )}
                                     </button>
                                 ))}
@@ -183,7 +182,7 @@ export function StepRenderer({ config, data, errors, onChange }: Props) {
                                         }`}
                                     >
                                         {opt.icon && <span className="text-3xl">{opt.icon}</span>}
-                                        <span className="font-medium text-gray-800 text-lg text-start">{opt.label}</span>
+                                        <span className="md:font-medium text-sm text-gray-800 md:text-lg text-start">{opt.label}</span>
                                     </button>
                                 ))}
                             </div>

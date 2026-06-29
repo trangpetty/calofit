@@ -1,11 +1,12 @@
 import {PricingCardProps} from "@/app/types/landing";
 import {CheckIcon} from "lucide-react";
 import {XIcon} from "@phosphor-icons/react";
+import Link from "next/link";
 
 export default function PricingCard({
                          title, titleColor, price, duration, description,
                          features, buttonText, buttonIcon, buttonClasses,
-                         isPopular, borderColor
+                         isPopular, borderColor, link = '/'
                      }: PricingCardProps) {
     return (
         <div className={`relative bg-white shadow-lg rounded-2xl p-6 md:p-8 flex flex-col h-full border-2 transition-transform hover:-translate-y-1 ${borderColor}`}>
@@ -42,10 +43,10 @@ export default function PricingCard({
                 ))}
             </ul>
 
-            <button className={`w-full py-3 px-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-colors ${buttonClasses}`}>
+            <Link href={link} className={`w-full py-3 px-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-colors ${buttonClasses}`}>
                 {buttonIcon}
                 {buttonText}
-            </button>
+            </Link>
         </div>
     );
 };
