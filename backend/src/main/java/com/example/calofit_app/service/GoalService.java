@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -20,41 +21,41 @@ public class GoalService {
     private final UserProfileRepository userProfileRepository;
     private final WeightLogRepository weightLogRepository;
 
-    public GoalProgressDTO getProgress (String email) {
+    public GoalProgressDTO getProgress(String email) {
         UserProfile profile = userProfileRepository.findByUserEmail(email)
                 .orElseThrow(() -> new RuntimeException("Profile not found"));
 
-        double current  = profile.getCurrentWeight() != null
-                ? profile.getCurrentWeight()
-                : profile.getStartWeight();
-        double target   = profile.getTargetWeight();
-        double start    = profile.getStartWeight();
-        double weekRate = profile.getWeeklyGoalRate() != null
-                ? profile.getWeeklyGoalRate() : 0.5;
+        // Null-safe với fallback
+        double current  = profile.getCurrentWeight() != null ? profile.getCurrentWeight()
+                : profile.getWeight() != null ? profile.getWeight() : 0.0;
+        double start    = profile.getStartWeight() != null ? profile.getStartWeight() : current;
+        double target   = profile.getTargetWeight() != null ? profile.getTargetWeight() : current;
+        double weekRate = profile.getWeeklyGoalRate() != null ? profile.getWeeklyGoalRate() : 0.5;
 
-        // Progress %
-        double totalDiff = Math.abs(start - target);
-        double doneDiff  = Math.abs(start - current);
-        double progress  = totalDiff == 0 ? 100.0 : (doneDiff / totalDiff) * 100.0;
-        progress = Math.min(100.0, Math.max(0.0, progress));
-
-        // Projected date
-        LocalDate projectedDate = null;
-        int weeksRemaining = 0;
-        double remaining = Math.abs(current - target);
-
-        boolean isMaintain = profile.getGoal() == Goal.MAINTAIN_WEIGHT;
-
-        if (!isMaintain && weekRate > 0 && remaining > 0.1) {
-            weeksRemaining = (int) Math.ceil(remaining / weekRate);
-            projectedDate  = LocalDate.now().plusWeeks(weeksRemaining);
+        // Progress — nếu chưa có target thì không tính được
+        Double progressPercent = null;
+        if (profile.getTargetWeight() != null && profile.getStartWeight() != null) {
+            double totalDiff = Math.abs(start - target);
+            double doneDiff  = Math.abs(start - current);
+            double progress  = totalDiff == 0 ? 100.0 : (doneDiff / totalDiff) * 100.0;
+            progressPercent  = Math.round(Math.min(100.0, Math.max(0.0, progress)) * 10.0) / 10.0;
         }
 
-        // Projected fast/slow scenarios (Premium feature)
+        // Projected date — chỉ tính khi đủ data
+        LocalDate projectedDate = null;
+        Integer weeksRemaining  = null;
         LocalDate projectedFast = null;
         LocalDate projectedSlow = null;
-        if (!isMaintain && remaining > 0.1) {
-            double fastRate = Math.min(weekRate * 2, 1.0); // cap 1kg/tuần
+
+        boolean isMaintain = profile.getGoal() != null && profile.getGoal() == Goal.MAINTAIN_WEIGHT;
+        double remaining   = Math.abs(current - target);
+
+        if (profile.getTargetWeight() != null && !isMaintain && weekRate > 0 && remaining > 0.1) {
+            int weeks      = (int) Math.ceil(remaining / weekRate);
+            weeksRemaining = weeks;
+            projectedDate  = LocalDate.now().plusWeeks(weeks);
+
+            double fastRate = Math.min(weekRate * 2, 1.0);
             double slowRate = Math.max(weekRate / 2, 0.25);
             projectedFast = LocalDate.now().plusWeeks((long) Math.ceil(remaining / fastRate));
             projectedSlow = LocalDate.now().plusWeeks((long) Math.ceil(remaining / slowRate));
@@ -65,25 +66,31 @@ public class GoalService {
                 .findWeeklyChange(profile.getUser().getId(), LocalDate.now().minusDays(7))
                 .orElse(null);
 
-        // BMI category
-        double heightM = profile.getHeight() / 100.0;
-        double bmi = profile.getWeight() / (heightM * heightM);
-        String bmiCategory = getBmiCategory(bmi);
+        // BMI — chỉ tính khi đủ data
+        Double bmi = null;
+        String bmiCategory = null;
+        if (profile.getHeight() != null && profile.getHeight() > 0
+                && profile.getWeight() != null && profile.getWeight() > 0) {
+            double heightM = profile.getHeight() / 100.0;
+            double bmiVal  = profile.getWeight() / (heightM * heightM);
+            bmi            = Math.round(bmiVal * 10.0) / 10.0;
+            bmiCategory    = getBmiCategory(bmiVal);
+        }
 
         log.info("progress of user {} created", email);
         return GoalProgressDTO.builder()
-                .startWeight(start)
-                .currentWeight(current)
-                .targetWeight(target)
-                .progressPercent(Math.round(progress * 10.0) / 10.0)
+                .startWeight(profile.getStartWeight())   // trả null nếu chưa có
+                .currentWeight(current > 0 ? current : null)
+                .targetWeight(profile.getTargetWeight()) // trả null nếu chưa có
+                .progressPercent(progressPercent)        // null nếu thiếu data
                 .weeklyActual(weeklyActual)
                 .weeklyTarget(weekRate)
                 .projectedDate(projectedDate)
-                .weeksRemaining(weeksRemaining > 0 ? weeksRemaining : null)
+                .weeksRemaining(weeksRemaining)
                 .projectedFast(projectedFast)
                 .projectedSlow(projectedSlow)
-                .goalType(profile.getGoal().name())
-                .bmi(Math.round(bmi * 10.0) / 10.0)
+                .goalType(profile.getGoal() != null ? profile.getGoal().name() : null)
+                .bmi(bmi)
                 .bmiCategory(bmiCategory)
                 .build();
     }

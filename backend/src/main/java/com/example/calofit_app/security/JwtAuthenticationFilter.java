@@ -10,6 +10,8 @@ import lombok.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -24,9 +26,11 @@ import java.util.stream.Collectors;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
+    private final UserDetailsService userDetailsService;
 
-    public JwtAuthenticationFilter(JwtService jwtService) {
+    public JwtAuthenticationFilter(JwtService jwtService, UserDetailsService userDetailsService) {
         this.jwtService = jwtService;
+        this.userDetailsService = userDetailsService;
     }
 
     @Override
@@ -60,21 +64,30 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             // 4. Kiểm tra xem Token còn hạn và hợp lệ không
             if (jwtService.isTokenValid(jwt, userEmail)) {
-                String safeRole = (roleString != null && !roleString.isEmpty()) ? roleString : "USER";
-                List<SimpleGrantedAuthority> authorities = Arrays.stream(safeRole.split(","))
-                        .map(role -> new SimpleGrantedAuthority("ROLE_" + role.trim().toUpperCase()))
-                        .collect(Collectors.toList());
-                // Tạo một cái "thẻ tên" gắn Role cho user này
+                UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
+
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        userEmail,
+                        userDetails,
                         null,
-                        authorities
+                        userDetails.getAuthorities()
                 );
+//                String safeRole = (roleString != null && !roleString.isEmpty()) ? roleString : "USER";
+//                List<SimpleGrantedAuthority> authorities = Arrays.stream(safeRole.split(","))
+//                        .map(role -> new SimpleGrantedAuthority("ROLE_" + role.trim().toUpperCase()))
+//                        .collect(Collectors.toList());
+//                // Tạo một cái "thẻ tên" gắn Role cho user này
+//                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+//                        userEmail,
+//                        null,
+//                        authorities
+//                );
 
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                 // Gắn "thẻ tên" vào Context để Spring Security biết là user này đã xác thực
                 SecurityContextHolder.getContext().setAuthentication(authToken);
+                logger.info("Request path: " + request.getServletPath());
+
             }
         }
 
