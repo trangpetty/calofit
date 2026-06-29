@@ -2,6 +2,14 @@ import NextAuth, { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 
+const isProd = process.env.NODE_ENV === 'production';
+// const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api/v1';
+const BASE_URL = 'http://localhost:8080/api/v1';
+
+const PROD_DOMAIN = process.env.NEXTAUTH_URL
+    ? new URL(process.env.NEXTAUTH_URL).hostname
+    : undefined;
+
 export const authOptions: NextAuthOptions = {
     secret: process.env.NEXTAUTH_SECRET,
     providers: [
@@ -19,7 +27,7 @@ export const authOptions: NextAuthOptions = {
             },
             async authorize(credentials) {
                 try {
-                    const res = await fetch("http://localhost:8080/api/v1/auth/login-or-register", {
+                    const res = await fetch(`${BASE_URL}/auth/login-or-register`, {
                         method: 'POST',
                         body: JSON.stringify(credentials),
                         headers: { "Content-Type": "application/json" }
@@ -42,7 +50,7 @@ export const authOptions: NextAuthOptions = {
                     return null;
                 }
             }
-        })
+        }),
     ],
     callbacks: {
         async jwt({ token, user, account }) {
@@ -54,7 +62,12 @@ export const authOptions: NextAuthOptions = {
 
             if (user && account?.provider === "google") {
                 try {
-                    const res = await fetch("http://localhost:8080/api/v1/auth/google", {
+                    console.log("Google account data:", {
+                        id_token: account.id_token ? "EXISTS" : "MISSING",
+                        provider: account.provider,
+                        error: (account as any).error
+                    });
+                    const res = await fetch(`${BASE_URL}/auth/google`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ idToken: account.id_token })
@@ -83,6 +96,35 @@ export const authOptions: NextAuthOptions = {
     },
     session: { strategy: "jwt", maxAge: 30 * 24 * 60 * 60 },
     pages: { signIn: '/login' },
+    cookies: {
+        callbackUrl: {
+            name: `${isProd ? '__Secure-' : ''}next-auth.callback-url`,
+            options: {
+                sameSite: 'lax',
+                path: '/',
+                secure: isProd,
+            },
+        },
+        sessionToken: {
+            name: `${isProd ? '__Secure-' : ''}next-auth.session-token`,
+            options: {
+                httpOnly: true,
+                sameSite: 'lax',
+                path: '/',
+                secure: isProd,
+                domain: isProd ? PROD_DOMAIN : undefined,
+            },
+        },
+        state: {
+            name: `${isProd ? '__Secure-' : ''}next-auth.state`,
+            options: {
+                httpOnly: true,
+                sameSite: 'lax',
+                path: '/',
+                secure: isProd,
+            },
+        },
+    },
 };
 
 const handler = NextAuth(authOptions);

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+  <g transform="translate(52, 10)">
+    <rect width="96" height="96" rx="24" fill="#ffffff"/>
+    
+    <path d="M48 66 C33 66 24 54 24 42 C24 30 33 21 42 15 C42 27 36 33 36 42 C36 48 39 54 48 54 C57 54 60 48 60 42 C60 33 54 27 54 15 C63 21 72 30 72 42 C72 54 63 66 48 66Z" 
+          fill="#16a34a" opacity="0.95"/>
+          
+    <path d="M48 57 C40.5 57 36 51 36 45 C36 39 40.5 34.5 45 31.5 C45 37.5 42 40.5 42 45 C42 49.5 44.25 52.5 48 52.5 C51.75 52.5 54 49.5 54 45 C54 40.5 51 37.5 51 31.5 C55.5 34.5 60 39 60 45 C60 51 55.5 57 48 57Z" 
+          fill="#ffffff"/>
+    
+    <rect x="24" y="81" width="7" height="9" rx="2" fill="#16a34a" opacity="0.55"/>
+    <rect x="34" y="75" width="7" height="15" rx="2" fill="#16a34a" opacity="0.75"/>
+    <rect x="44" y="70" width="7" height="20" rx="2" fill="#16a34a"/>
+    <rect x="54" y="75" width="7" height="15" rx="2" fill="#16a34a" opacity="0.75"/>
+    <rect x="64" y="81" width="7" height="9" rx="2" fill="#16a34a" opacity="0.55"/>
+  </g>
+ 
+  <text x="100" y="155" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="58" font-weight="500" letter-spacing="-2">
+    <tspan fill="#ffffff">Calo</tspan><tspan fill="#14532d">fit</tspan>
+  </text>
+</svg>

@@ -1,6 +1,6 @@
 'use client'
 
-import { usePathname } from "next/navigation";
+import {usePathname, useRouter} from "next/navigation";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useState } from "react";
@@ -30,9 +30,15 @@ const NAV_LINKS = [
 ];
 
 export default function Header() {
+    const router = useRouter();
+
     const pathname = usePathname();
     const { data: session, status } = useSession();
     const [isMobileOpen, setIsMobileOpen] = useState(false);
+    const handleLogout = async () => {
+        await signOut({redirect: false});
+        router.push('/');
+    }
 
     return (
         <header className="bg-emerald-600 text-white backdrop-blur-md shadow-lg border-b sticky top-0 z-50">
@@ -129,7 +135,7 @@ export default function Header() {
 
                                             <DropdownMenuSeparator />
 
-                                            <DropdownMenuItem className="cursor-pointer font-medium text-red-500 focus:text-red-500 focus:bg-red-50">
+                                            <DropdownMenuItem className="cursor-pointer font-medium text-red-500 focus:text-red-500 focus:bg-red-50" onClick={handleLogout}>
                                                 Đăng xuất
                                             </DropdownMenuItem>
                                         </DropdownMenuContent>

@@ -116,26 +116,30 @@ export default function OnboardingForm({isLoggedIn = false}: {isLoggedIn?: boole
     const [profile, setProfile] = useState<ProfileResult | null>(null);
 
     useEffect(() => {
+        if (!isLoggedIn) return;
+
         const pendingData = localStorage.getItem('pendingOnboardingData');
 
-        if (isLoggedIn) {
-            if (pendingData) {
-                handleAuthSuccess();
-            } else {
-                async function fetchProfile() {
+        if (pendingData) {
+            handleAuthSuccess();
+        } else {
+            async function fetchProfile() {
+                try {
                     const res = await getProfile();
-                    if (res.status === 'success') {
+                    if (res?.status === 'success') {
                         setProfile(res.data as ProfileResult);
                     }
+                } catch (error) {
+                    console.error("Lỗi khi fetch profile:", error);
                 }
-                fetchProfile();
             }
+            fetchProfile();
         }
-    }, []);
+    }, [isLoggedIn]);
     const isSuccess = actionState.status === 'success';
 
     return (
-        <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
+        <div className="min-h-screen bg-gray-50 flex flex-col items-center md:justify-center md:p-4 justify-start w-full md:w-[500px]">
             <div className="w-full bg-white rounded-3xl shadow-xl overflow-hidden">
                 {(isSuccess || profile) ? (
                     <SuccessScreen
@@ -149,7 +153,7 @@ export default function OnboardingForm({isLoggedIn = false}: {isLoggedIn?: boole
                             />
                         </div>
 
-                        <div className="p-8">
+                        <div className="md:p-8 p-4">
                             {showAuthStep ? (
                                 <AuthStep
                                     onBack={() => setShowAuthStep(false)}
@@ -161,7 +165,7 @@ export default function OnboardingForm({isLoggedIn = false}: {isLoggedIn?: boole
                                     e.preventDefault();
                                     goNext();
                                 })}>
-                                    <div className="min-h-[340px]">
+                                    <div className="md:min-h-[340px] min-h-[500px]">
                                        <StepRenderer
                                             config={STEPS[currentStep]}
                                             data={formData}

@@ -49,14 +49,14 @@ export function AuthStep({onBack, onSuccess}: AuthStepProps) {
     }
 
     return (
-        <div className="p-8 animate-fade-in-up w-full max-w-md mx-auto">
+        <div className="md:p-8 animate-fade-in-up w-full max-w-md mx-auto">
 
             <div className="w-full relative flex items-center justify-center mb-8">
                 <div className="absolute left-0 cursor-pointer hover:opacity-80 transition-opacity text-gray-900" onClick={onBack}>
                     <ArrowLeftIcon size={16} weight="bold" />
                 </div>
 
-                <h2 className="text-lg font-extrabold text-gray-900">
+                <h2 className="md:text-lg text-base font-extrabold text-gray-900 ml-4">
                     Almost there! Create your account.
                 </h2>
             </div>
