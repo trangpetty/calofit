@@ -50,28 +50,28 @@ export default function Home() {
             title: "Food database Việt",
             description: "500+ món ăn Việt, tìm bằng tiếng Việt. Barcode scan cho thực phẩm đóng gói.",
             icon: <BowlFood size={32} weight="fill" />,
-            colorTheme: "green"
+            colorTheme: "green" as const
         },
         {
             id: 2,
             title: "AI coach tiếng Việt",
             description: "Chatbot gợi ý thực đơn và lịch tập cá nhân hóa theo dữ liệu của bạn.",
             icon: <BrainIcon size={32} weight="fill" />,
-            colorTheme: "purple"
+            colorTheme: "purple" as const
         },
         {
             id: 3,
             title: "Lịch tập thông minh",
             description: "Template Gym/HIIT/Yoga hoặc AI tạo theo BMI và mục tiêu. Timer tự động.",
             icon: <BarbellIcon size={32} weight="fill" />,
-            colorTheme: "blue"
+            colorTheme: "blue" as const
         },
         {
             id: 4,
             title: "Kết nối PT thật",
             description: "PT được duyệt bởi Calofit. Lịch tập riêng, chat realtime, video call 2 lần/tháng.",
             icon: <UserCircleCheckIcon size={32} weight="fill" />,
-            colorTheme: "indigo"
+            colorTheme: "indigo" as const
         }
     ];
 
@@ -183,7 +183,7 @@ export default function Home() {
         }
     ];
 
-    const [openIndex, setOpenIndex] = useState(0);
+    const [openIndex, setOpenIndex] = useState<number | null>(0);
 
     const faqs = [
         {
@@ -204,7 +204,7 @@ export default function Home() {
         }
     ];
 
-    const handleToggle = (index) => {
+    const handleToggle = (index: number) => {
         setOpenIndex(openIndex === index ? null : index);
     };
 

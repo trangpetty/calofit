@@ -1,5 +1,12 @@
 import {ReactNode} from "react";
 
+export const colorClasses = {
+    green: "bg-green-100 text-green-700",
+    purple: "bg-purple-100 text-purple-700",
+    blue: "bg-blue-100 text-blue-700",
+    indigo: "bg-indigo-100 text-indigo-700"
+};
+
 export interface CardProps {
     number: number;
     title: string;
@@ -11,7 +18,7 @@ export interface FeatureCardProps {
     title: string;
     description: string;
     icon: ReactNode;
-    colorTheme: string;
+    colorTheme: keyof typeof colorClasses;
 }
 
 export interface ReviewCardProps {
