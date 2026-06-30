@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
     Plus,
     CalendarIcon,
@@ -8,15 +8,15 @@ import {
     TargetIcon,
     Fire
 } from "@phosphor-icons/react";
-import {Button} from "@/components/ui/button";
 import BaseCard from "@/app/(calofit)/dashboard/components/(cards)/base_card";
 import MetricCard from "@/app/(calofit)/dashboard/components/(cards)/metric_card";
 import {ChartConfig, ChartContainer} from "@/components/ui/chart";
 import {Bar, BarChart, CartesianGrid, Cell, LabelList, ReferenceLine, XAxis, YAxis} from "recharts";
-import {Star} from "lucide-react";
+import WeightLogModal from "@/app/(calofit)/progress/components/WeightLogModal";
+import {GoalProgressResult} from "@/app/types/progress";
 
 interface ContentProgressProps {
-    profile?: any
+    profile?: GoalProgressResult | undefined
 }
 
 export default function ContentProgress ({profile}: ContentProgressProps) {
@@ -44,8 +44,35 @@ export default function ContentProgress ({profile}: ContentProgressProps) {
         { emoji: "🏆", text: "Get goal", isUnlocked: false },
     ];
 
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const handleOpenModal = () => {
+        setIsModalOpen(true);
+    }
+
+    useEffect(() => {
+        const isMissingData = profile?.targetWeight == null || !profile?.currentWeight;
+        if (isMissingData) {
+            setIsModalOpen(true);
+        }
+    }, [profile]);
+
+    const handleRefreshData = () => {
+        console.log("refresh");
+    }
+
     return (
         <div className="w-full max-w-7xl mx-auto p-4 min-h-screen text-gray-900 font-sans flex flex-col gap-6">
+
+            <button onClick={handleOpenModal}>
+                + Weight log
+            </button>
+            <WeightLogModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onSuccess={handleRefreshData}
+                profile={profile}
+            />
 
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                 <MetricCard title="Current weight" icon={<BarbellIcon size={14} weight="bold" />} mainValue="60" subValue="kg · Starting weight: 64kg" footerText="Lose 4kg" themeColor="green" />

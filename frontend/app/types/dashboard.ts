@@ -1,4 +1,5 @@
 import {ReactNode} from "react";
+import {GoalProgressResult} from "@/app/types/progress";
 
 export type ThemColor = 'green' | 'blue' | 'orange' | 'cyan' | 'purple';
 export type DayStatus = 'done' | 'current' | 'future';
@@ -65,5 +66,12 @@ export interface GoalProgressProps {
 export interface StreakDay {
     label: string;
     status: DayStatus;
+}
+
+export interface MissingFieldsModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+    onSuccess: () => void;
+    profile: GoalProgressResult | undefined;
 }
 

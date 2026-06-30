@@ -5,26 +5,38 @@ export interface WeightLogData {
     loggedDate: string | null;
 }
 
+export interface WeightLogProps {
+    isOpen: boolean;
+    onClose: () => void;
+    onSuccess: () => void;
+    profile: GoalProgressResult | undefined;
+}
+
 export type FormDataState = Partial<WeightLogData>;
 
-export interface WeightLogState {
+export interface State {
     status: 'idle' | 'success' | 'error';
     message?: string;
     data?: any;
 }
 
 export interface GoalProgressResult {
-    startWeight: number;
-    currentWeight: number;
+    age: number;
+    gender: string;
+    weight: number;
+    height: number;
+    activityLevel: string;
+    goal: string;
+    bmr: number;
+    tdee: number;
+    dailyCaloriesGoal: number;
+    bmi: number;
+    proteinTarget: number;
+    carbsTarget: number;
+    fatTarget: number;
+    startWeight: number,
     targetWeight: number;
-    progressPercent: number;
-    weeklyActual: number;
-    weeklyTarget: number;
-    projectedDate: string;
-    weeksRemaining: number;
-    goalType: string;
-    bmiCategory: string;
-    bmt: number;
-    projectedFast: string;
-    projectedSlow: string;
+    currentWeight: number;
+    weeklyGoalRate: number;
+    startDate: number;
 }

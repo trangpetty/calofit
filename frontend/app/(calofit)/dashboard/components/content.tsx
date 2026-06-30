@@ -7,6 +7,8 @@ import MetricCard from "@/app/(calofit)/dashboard/components/(cards)/metric_card
 import MacrosCard from "@/app/(calofit)/dashboard/components/(cards)/MacrosCard";
 import CaloriesWeekCard from "@/app/(calofit)/dashboard/components/(cards)/CaloriesWeekCard";
 import { Button } from "@/components/ui/button";
+import {useEffect, useState} from "react";
+import MissingFieldsModal from "@/app/(calofit)/dashboard/components/MissingFieldsModal";
 
 export default function ContentDashBoard ({profile}: {profile: any}) {
     const {data: session, status} = useSession();
@@ -56,6 +58,24 @@ export default function ContentDashBoard ({profile}: {profile: any}) {
             themeColor: "cyan" as const,
         }
     ];
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    useEffect(() => {
+        const isMissingData =
+            !profile?.gender ||
+            !profile?.age ||
+            !profile?.height ||
+            !profile?.weight ||
+            !profile?.activityLevel ||
+            !profile?.goal ||
+            profile?.targetWeight == null ||
+            profile?.weeklyGoalRate == null;
+
+        if (isMissingData) {
+            setIsModalOpen(true);
+        }
+    }, [profile]);
+
     return (
         <main className="max-w-5xl mx-auto md:px-6 px-2 md:mt-8 mt-4 space-y-6">
             {session ?
@@ -137,6 +157,12 @@ export default function ContentDashBoard ({profile}: {profile: any}) {
                 ) : (
                     <></>
                 )}
+            <MissingFieldsModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                profile={profile}
+                onSuccess={() => console.log("Refresh dữ liệu Dashboard")}
+            />s
         </main>
     );
 }

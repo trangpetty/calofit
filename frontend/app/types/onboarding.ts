@@ -12,6 +12,7 @@ export interface ProfileFormData {
     goal: Goal | '';
     targetWeight?: number;
     weeklyGoalRate?: number;
+    startDate?: string;
 }
 
 export interface ProfileResult {
@@ -33,7 +34,7 @@ export interface OnboardingState {
 }
 // ── Config types ──────────────────────────────────────────────────────────────
 
-export type FieldType = 'number-input' | 'card-select' | 'icon-select' | 'text-input' | 'radio-select';
+export type FieldType = 'number-input' | 'card-select' | 'icon-select' | 'text-input' | 'radio-select' | 'date';
 
 export interface OptionItem {
     id:    string;

@@ -3,12 +3,14 @@
 import {requireAuth} from "@/app/utils/auth";
 import {doGet, doPost} from "@/app/utils/api";
 import {GoalProgressResult, WeightLogData, WeightLogState} from "@/app/types/progress";
+import {revalidatePath} from "next/cache";
 
 export async function logWeight(prevState: WeightLogState, rawData: FormData | WeightLogData):Promise<WeightLogState> {
     try {
         const {token} = await requireAuth();
         const result = await doPost<GoalProgressResult>("/weight-log", rawData, token);
 
+        revalidatePath('/progress');
         return { status: 'success', data: result as GoalProgressResult};
 
     } catch (error) {
@@ -18,7 +20,7 @@ export async function logWeight(prevState: WeightLogState, rawData: FormData | W
     }
 }
 
-export async function getProgress () {
+export async function getProgress ():Promise<WeightLogState> {
     try {
         const {token} = await requireAuth();
 

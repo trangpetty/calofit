@@ -40,6 +40,16 @@ export default function Header() {
         router.push('/');
     }
 
+    const displayName = session?.user?.name || "User";
+
+    const getInitials = (name: string) => {
+        const parts = name.trim().split(' ');
+        if (parts.length >= 2) {
+            return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+        }
+        return name.substring(0, 2).toUpperCase();
+    };
+
     return (
         <header className="bg-emerald-600 text-white backdrop-blur-md shadow-lg border-b sticky top-0 z-50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -113,12 +123,12 @@ export default function Header() {
                                             <Avatar>
                                                 <AvatarImage
                                                     src={session.user?.image ?? undefined}
-                                                    alt={session.user?.name ?? ""}
+                                                    alt={displayName}
                                                 />
-                                                <AvatarFallback>{session.user?.name}</AvatarFallback>
+                                                <AvatarFallback>{getInitials(displayName)}</AvatarFallback>
                                             </Avatar>
 
-                                            <span className="text-sm font-bold">{session.user?.name}</span>
+                                            <span className="text-sm font-bold">{displayName}</span>
 
                                             <CaretDown size={14} weight="bold" />
 

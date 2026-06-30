@@ -8,10 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @Controller
@@ -40,5 +37,12 @@ public class UserProfileController {
         } catch (RuntimeException e) {
             return ResponseEntity.status(404).body(e.getMessage());
         }
+    }
+
+    @PutMapping
+    public ResponseEntity<UserProfile> updateProfilePartial(@RequestBody UserProfileRequest request, Authentication authentication) {
+        String email = authentication.getName();
+        UserProfile updatedProfile = userProfileService.updatePartialProfile(email, request);
+        return ResponseEntity.ok(updatedProfile);
     }
 }

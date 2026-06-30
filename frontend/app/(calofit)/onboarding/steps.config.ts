@@ -119,4 +119,14 @@ export const STEPS: StepConfig[] = [
             },
         ],
     },
+    {
+        title: 'What date do you want to start the progress?',
+        fields: [
+            {
+                name:    'startDate',
+                label:   '',
+                type:    'date',
+            },
+        ],
+    },
 ];

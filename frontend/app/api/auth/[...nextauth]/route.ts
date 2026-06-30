@@ -55,8 +55,16 @@ export const authOptions: NextAuthOptions = {
     callbacks: {
         async jwt({ token, user, account }) {
             if (user && account?.provider === "credentials") {
-                token.id = user.id;
-                token.accessToken = (user as any).accessToken;
+                const customUser = user as any;
+
+                token.name =
+                    customUser.displayName ||
+                    customUser.email?.split('@')[0] ||
+                    "User";
+
+                token.id = customUser.id;
+                token.accessToken = customUser.accessToken;
+                token.role = customUser.role;
             }
 
 
@@ -90,6 +98,7 @@ export const authOptions: NextAuthOptions = {
                 (session as any).accessToken = token.accessToken;
                 (session as any).refreshToken = token.refreshToken;
                 (session.user as any).role = token.role;
+                session.user.name = token.name;
             }
             return session;
         }
